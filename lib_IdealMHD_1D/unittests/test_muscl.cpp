@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../muscl.cpp"
+#include "../muscl.hpp"
 #include <algorithm>
 #include <vector>
 

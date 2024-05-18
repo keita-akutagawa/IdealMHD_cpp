@@ -5,11 +5,8 @@
 
 class MUSCL;
 
-class CalculateHalfComponents
+struct Components
 {
-private:
-    MUSCL* muscl;
-
     std::vector<double> rho;
     std::vector<double> u;
     std::vector<double> v;
@@ -18,24 +15,17 @@ private:
     std::vector<double> by;
     std::vector<double> bz;
     std::vector<double> p;
+};
 
-    std::vector<double> rhoL;
-    std::vector<double> uL;
-    std::vector<double> vL;
-    std::vector<double> wL;
-    std::vector<double> bxL;
-    std::vector<double> byL;
-    std::vector<double> bzL;
-    std::vector<double> pL;
 
-    std::vector<double> rhoR;
-    std::vector<double> uR;
-    std::vector<double> vR;
-    std::vector<double> wR;
-    std::vector<double> bxR;
-    std::vector<double> byR;
-    std::vector<double> bzR;
-    std::vector<double> pR;
+class CalculateHalfComponents
+{
+private:
+    MUSCL* muscl;
+
+    Components componentsCenter;
+    Components componentsLeft;
+    Components componentsRight;
 
     std::vector<double> tmpVector;
 
@@ -49,5 +39,11 @@ public:
     void calculateLeftComponents();
 
     void calculateRightComponents();
+
+    Components getCenterComponents();
+
+    Components getLeftComponents();
+
+    Components getRightComponents();
 };
 

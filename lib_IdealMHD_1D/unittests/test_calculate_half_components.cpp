@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include "../calculate_half_components.cpp"
-#include "../const.cpp"
+#include "../calculate_half_components.hpp"
+#include "../const.hpp"
 #include <algorithm>
 #include <vector>
 
@@ -13,8 +13,11 @@ TEST(CalculateHalfComponentsTest, Constructor)
 
     calculateHalfComponents.getPhysicalParameters(U);
 
+    Components components;
+    components = calculateHalfComponents.getCenterComponents();
+
     for (int i = 0; i < nx; i++) {
-        EXPECT_EQ(U[0][i], 1.0);
+        EXPECT_EQ(components.rho[i], 1.0);
     }
 }
 

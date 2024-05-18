@@ -1,4 +1,4 @@
-#include "../const.cpp"
+#include "../const.hpp"
 #include <iostream>
 
 int main()

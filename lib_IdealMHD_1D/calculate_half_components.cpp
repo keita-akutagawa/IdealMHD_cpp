@@ -6,32 +6,32 @@
 
 CalculateHalfComponents::CalculateHalfComponents()
 {
-    rho = std::vector<double>(nx, 0.0);
-    u = std::vector<double>(nx, 0.0);
-    v = std::vector<double>(nx, 0.0);
-    w = std::vector<double>(nx, 0.0);
-    bx = std::vector<double>(nx, 0.0);
-    by = std::vector<double>(nx, 0.0);
-    bz = std::vector<double>(nx, 0.0);
-    p = std::vector<double>(nx, 0.0);
+    componentsCenter.rho = std::vector<double>(nx, 0.0);
+    componentsCenter.u = std::vector<double>(nx, 0.0);
+    componentsCenter.v = std::vector<double>(nx, 0.0);
+    componentsCenter.w = std::vector<double>(nx, 0.0);
+    componentsCenter.bx = std::vector<double>(nx, 0.0);
+    componentsCenter.by = std::vector<double>(nx, 0.0);
+    componentsCenter.bz = std::vector<double>(nx, 0.0);
+    componentsCenter.p = std::vector<double>(nx, 0.0);
 
-    rhoL = std::vector<double>(nx, 0.0);
-    uL = std::vector<double>(nx, 0.0);
-    vL = std::vector<double>(nx, 0.0);
-    wL = std::vector<double>(nx, 0.0);
-    bxL = std::vector<double>(nx, 0.0);
-    byL = std::vector<double>(nx, 0.0);
-    bzL = std::vector<double>(nx, 0.0);
-    pL = std::vector<double>(nx, 0.0);
+    componentsLeft.rho = std::vector<double>(nx, 0.0);
+    componentsLeft.u = std::vector<double>(nx, 0.0);
+    componentsLeft.v = std::vector<double>(nx, 0.0);
+    componentsLeft.w = std::vector<double>(nx, 0.0);
+    componentsLeft.bx = std::vector<double>(nx, 0.0);
+    componentsLeft.by = std::vector<double>(nx, 0.0);
+    componentsLeft.bz = std::vector<double>(nx, 0.0);
+    componentsLeft.p = std::vector<double>(nx, 0.0);
 
-    rhoR = std::vector<double>(nx, 0.0);
-    uR = std::vector<double>(nx, 0.0);
-    vR = std::vector<double>(nx, 0.0);
-    wR = std::vector<double>(nx, 0.0);
-    bxR = std::vector<double>(nx, 0.0);
-    byR = std::vector<double>(nx, 0.0);
-    bzR = std::vector<double>(nx, 0.0);
-    pR = std::vector<double>(nx, 0.0);
+    componentsRight.rho = std::vector<double>(nx, 0.0);
+    componentsRight.u = std::vector<double>(nx, 0.0);
+    componentsRight.v = std::vector<double>(nx, 0.0);
+    componentsRight.w = std::vector<double>(nx, 0.0);
+    componentsRight.bx = std::vector<double>(nx, 0.0);
+    componentsRight.by = std::vector<double>(nx, 0.0);
+    componentsRight.bz = std::vector<double>(nx, 0.0);
+    componentsRight.p = std::vector<double>(nx, 0.0);
 
     tmpVector = std::vector<double>(nx, 0.0);
 }
@@ -41,58 +41,85 @@ void CalculateHalfComponents::getPhysicalParameters(
     const std::vector<std::vector<double>> U
 )
 {
+    double rho, u, v, w, bx, by, bz, e, p;
+
     for (int i = 0; i < nx; i++) {
-        rho[i] = U[0][i];
+        rho = U[0][i];
 
         //U[1] = rho * u
-        tmpVector[i] = U[1][i];
-        u[i] = tmpVector[i] / rho[i];
+        u = U[1][i] / rho;
 
         //U[2] = rho * v
-        tmpVector[i] = U[2][i];
-        v[i] = tmpVector[i] / rho[i];
+        v = U[2][i] / rho;
 
         //U[3] = rho * w
-        tmpVector[i] = U[3][i];
-        w[i] = tmpVector[i] / rho[i];
+        w = U[3][i] / rho;
 
-        bx[i] = U[4][i];
-        by[i] = U[5][i];
-        bz[i] = U[6][i];
+        bx = U[4][i];
+        by = U[5][i];
+        bz = U[6][i];
 
         //U[7] = e
-        tmpVector[i] = U[7][i];
-        p[i] = (gamma_mhd - 1.0)
-             * (tmpVector[i]
-             - 0.5 * rho[i] * (u[i] * u[i] + v[i] * v[i] + w[i] * w[i])
-             - 0.5 * (bx[i] * bx[i] + by[i] * by[i] + bz[i] * bz[i])
-             );
+        e = U[7][i];
+        p = (gamma_mhd - 1.0)
+          * (e
+          - 0.5 * rho * (u * u + v * v + w * w)
+          - 0.5 * (bx * bx + by * by + bz * bz)
+          );
+        
+
+        componentsCenter.rho[i] = rho;
+        componentsCenter.u[i] = u;
+        componentsCenter.v[i] = v;
+        componentsCenter.w[i] = w;
+        componentsCenter.bx[i] = bx;
+        componentsCenter.by[i] = by;
+        componentsCenter.bz[i] = bz;
+        componentsCenter.p[i] = p;
     }
 }
 
 
 void CalculateHalfComponents::calculateLeftComponents()
 { 
-    muscl->getLeftComponent(rho, rhoL);
-    muscl->getLeftComponent(u, uL);
-    muscl->getLeftComponent(v, vL);
-    muscl->getLeftComponent(w, wL);
-    muscl->getLeftComponent(bx, bxL);
-    muscl->getLeftComponent(by, byL);
-    muscl->getLeftComponent(bz, bzL);
-    muscl->getLeftComponent(p, pL);
+    muscl->getLeftComponent(componentsCenter.rho, componentsLeft.rho);
+    muscl->getLeftComponent(componentsCenter.u,   componentsLeft.u);
+    muscl->getLeftComponent(componentsCenter.v,   componentsLeft.v);
+    muscl->getLeftComponent(componentsCenter.w,   componentsLeft.w);
+    muscl->getLeftComponent(componentsCenter.bx,  componentsLeft.bx);
+    muscl->getLeftComponent(componentsCenter.by,  componentsLeft.by);
+    muscl->getLeftComponent(componentsCenter.bz,  componentsLeft.bz);
+    muscl->getLeftComponent(componentsCenter.p,   componentsLeft.p);
 }
 
 
 void CalculateHalfComponents::calculateRightComponents()
 { 
-    muscl->getRightComponent(rho, rhoR);
-    muscl->getRightComponent(u, uR);
-    muscl->getRightComponent(v, vR);
-    muscl->getRightComponent(w, wR);
-    muscl->getRightComponent(bx, bxR);
-    muscl->getRightComponent(by, byR);
-    muscl->getRightComponent(bz, bzR);
-    muscl->getRightComponent(p, pR);
+    muscl->getRightComponent(componentsCenter.rho, componentsRight.rho);
+    muscl->getRightComponent(componentsCenter.u,   componentsRight.u);
+    muscl->getRightComponent(componentsCenter.v,   componentsRight.v);
+    muscl->getRightComponent(componentsCenter.w,   componentsRight.w);
+    muscl->getRightComponent(componentsCenter.bx,  componentsRight.bx);
+    muscl->getRightComponent(componentsCenter.by,  componentsRight.by);
+    muscl->getRightComponent(componentsCenter.bz,  componentsRight.bz);
+    muscl->getRightComponent(componentsCenter.p,   componentsRight.p);
+}
+
+
+Components CalculateHalfComponents::getCenterComponents()
+{
+    return componentsCenter;
+}
+
+
+Components CalculateHalfComponents::getLeftComponents()
+{
+    return componentsLeft;
+}
+
+
+Components CalculateHalfComponents::getRightComponents()
+{
+    return componentsRight;
 }
 
