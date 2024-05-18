@@ -1,6 +1,6 @@
 #include <algorithm>
 #include <vector>
-#include "minmod.hpp"
+#include "minmod.cpp"
 #include "muscl.hpp"
 
 
