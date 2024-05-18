@@ -37,7 +37,7 @@ CalculateHalfComponents::CalculateHalfComponents()
 }
 
 
-void CalculateHalfComponents::getPhysicalParameters(
+void CalculateHalfComponents::setPhysicalParameters(
     const std::vector<std::vector<double>> U
 )
 {

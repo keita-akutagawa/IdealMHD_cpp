@@ -32,7 +32,7 @@ private:
 public:
     CalculateHalfComponents();
 
-    void getPhysicalParameters(
+    void setPhysicalParameters(
         const std::vector<std::vector<double>> U
     );
 

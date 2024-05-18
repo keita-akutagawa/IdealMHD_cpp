@@ -1,9 +1,12 @@
 #!/bin/bash
 
 options="-lgtest -lgtest_main -pthread"
-programfile="../calculate_half_components.cpp ../muscl.cpp ../minmod.cpp ../const.cpp"
-testfile="test_calculate_half_components.cpp"
-g++ $testfile $programfile $options
-./a.out
+programfile="../*.cpp"
+testfiles=$(find . -name "test_*.cpp")
+
+for testfile in $testfiles; do
+    g++ $testfile $programfile $options
+    ./a.out
+done
 
 

@@ -1,3 +1,3 @@
 
-inline double minmod(double x, double y);
+double minmod(double x, double y);
 
