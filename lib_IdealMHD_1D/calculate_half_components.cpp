@@ -6,6 +6,8 @@
 
 CalculateHalfComponents::CalculateHalfComponents()
 {
+    MUSCL muscl;
+
     componentsCenter.rho = std::vector<double>(nx, 0.0);
     componentsCenter.u = std::vector<double>(nx, 0.0);
     componentsCenter.v = std::vector<double>(nx, 0.0);
@@ -82,27 +84,27 @@ void CalculateHalfComponents::setPhysicalParameters(
 
 void CalculateHalfComponents::calculateLeftComponents()
 { 
-    muscl->getLeftComponent(componentsCenter.rho, componentsLeft.rho);
-    muscl->getLeftComponent(componentsCenter.u,   componentsLeft.u);
-    muscl->getLeftComponent(componentsCenter.v,   componentsLeft.v);
-    muscl->getLeftComponent(componentsCenter.w,   componentsLeft.w);
-    muscl->getLeftComponent(componentsCenter.bx,  componentsLeft.bx);
-    muscl->getLeftComponent(componentsCenter.by,  componentsLeft.by);
-    muscl->getLeftComponent(componentsCenter.bz,  componentsLeft.bz);
-    muscl->getLeftComponent(componentsCenter.p,   componentsLeft.p);
+    muscl.getLeftComponent(componentsCenter.rho, componentsLeft.rho);
+    muscl.getLeftComponent(componentsCenter.u,   componentsLeft.u);
+    muscl.getLeftComponent(componentsCenter.v,   componentsLeft.v);
+    muscl.getLeftComponent(componentsCenter.w,   componentsLeft.w);
+    muscl.getLeftComponent(componentsCenter.bx,  componentsLeft.bx);
+    muscl.getLeftComponent(componentsCenter.by,  componentsLeft.by);
+    muscl.getLeftComponent(componentsCenter.bz,  componentsLeft.bz);
+    muscl.getLeftComponent(componentsCenter.p,   componentsLeft.p);
 }
 
 
 void CalculateHalfComponents::calculateRightComponents()
 { 
-    muscl->getRightComponent(componentsCenter.rho, componentsRight.rho);
-    muscl->getRightComponent(componentsCenter.u,   componentsRight.u);
-    muscl->getRightComponent(componentsCenter.v,   componentsRight.v);
-    muscl->getRightComponent(componentsCenter.w,   componentsRight.w);
-    muscl->getRightComponent(componentsCenter.bx,  componentsRight.bx);
-    muscl->getRightComponent(componentsCenter.by,  componentsRight.by);
-    muscl->getRightComponent(componentsCenter.bz,  componentsRight.bz);
-    muscl->getRightComponent(componentsCenter.p,   componentsRight.p);
+    muscl.getRightComponent(componentsCenter.rho, componentsRight.rho);
+    muscl.getRightComponent(componentsCenter.u,   componentsRight.u);
+    muscl.getRightComponent(componentsCenter.v,   componentsRight.v);
+    muscl.getRightComponent(componentsCenter.w,   componentsRight.w);
+    muscl.getRightComponent(componentsCenter.bx,  componentsRight.bx);
+    muscl.getRightComponent(componentsCenter.by,  componentsRight.by);
+    muscl.getRightComponent(componentsCenter.bz,  componentsRight.bz);
+    muscl.getRightComponent(componentsCenter.p,   componentsRight.p);
 }
 
 

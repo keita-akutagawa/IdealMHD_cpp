@@ -21,7 +21,7 @@ struct Components
 class CalculateHalfComponents
 {
 private:
-    MUSCL* muscl;
+    MUSCL muscl;
 
     Components componentsCenter;
     Components componentsLeft;
