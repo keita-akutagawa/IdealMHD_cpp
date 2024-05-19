@@ -27,6 +27,7 @@ struct FanParameters
     std::vector<double> by;
     std::vector<double> bz;
     std::vector<double> e;
+    std::vector<double> pT;
 };
 
 struct HLLDParameters
@@ -44,6 +45,12 @@ struct HLLDParameters
     std::vector<double> SM;
 };
 
+struct Flux
+{
+    std::vector<std::vector<double>> flux;
+};
+
+
 
 
 class HLLD
@@ -51,28 +58,59 @@ class HLLD
 private:
     CalculateHalfComponents calculateHalfComponents;
     Components componentsCenter;
-    FanParameters outerFanParameters;
-    FanParameters innerFanParameters;
+    Components componentsLeft;
+    Components componentsRight;
+    FanParameters outerLeftFanParameters;
+    FanParameters outerRightFanParameters;
+    FanParameters middleLeftFanParameters;
+    FanParameters middleRightFanParameters;
+    FanParameters innerLeftFanParameters;
+    FanParameters innerRightFanParameters;
     HLLDParameters hLLDLeftParameters;
     HLLDParameters hLLDRightParameters;
+
+    Flux flux;
+    Flux fluxLeft, fluxOuterLeft, fluxInnerLeft;
+    Flux fluxRight, fluxOuterRight, fluxInnerRight;
 
 public:
     HLLD();
 
-    void calculateHLLDParametersForOuterFanParameters(
+    void calculateFlux(
         const std::vector<std::vector<double>> U
     );
 
-    void calculateHLLDParametersForInnerFanParameters();
-
-    Components getOuterFanParameters();
-
-    Components getInnerFanParameters();
-
 private:
+    double sign(double x);
+
+    void setComponents(
+        const std::vector<std::vector<double>> U
+    );
+
+    //void calculateHLLDParametersForOuterFan();
+
+    void calculateHLLDParametersForMiddleFan();
+
+    void calculateHLLDParametersForInnerFan();
+
     void calculateHLLDSubParameters(
         const Components components, 
         HLLDParameters hLLDParameters
     );
+
+    void calculateHLLDParameters1(
+        const Components components, 
+        const HLLDParameters hLLDParameters, 
+        FanParameters outerFanParameters
+    );
+
+    void calculateHLLDParameters2(
+        const FanParameters outerLeftFanParameters,
+        const FanParameters outerRightFanParameters, 
+        FanParameters innerLeftFanParameters, 
+        FanParameters innerRightFanParameters
+    );
+
+    void setFlux();
 };
 
