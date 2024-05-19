@@ -5,17 +5,6 @@
 
 class CalculateHalfComponents;
 
-struct Components
-{
-    std::vector<double> rho;
-    std::vector<double> u;
-    std::vector<double> v;
-    std::vector<double> w;
-    std::vector<double> bx;
-    std::vector<double> by;
-    std::vector<double> bz;
-    std::vector<double> p;
-};
 
 struct FanParameters
 {
@@ -70,8 +59,8 @@ private:
     HLLDParameters hLLDRightParameters;
 
     Flux flux;
-    Flux fluxLeft, fluxOuterLeft, fluxInnerLeft;
-    Flux fluxRight, fluxOuterRight, fluxInnerRight;
+    Flux fluxOuterLeft, fluxMiddleLeft, fluxInnerLeft;
+    Flux fluxOuterRight, fluxMiddleRight, fluxInnerRight;
 
 public:
     HLLD();
@@ -87,21 +76,27 @@ private:
         const std::vector<std::vector<double>> U
     );
 
-    //void calculateHLLDParametersForOuterFan();
+    void calculateHLLDParametersForOuterFan();
 
     void calculateHLLDParametersForMiddleFan();
 
     void calculateHLLDParametersForInnerFan();
 
-    void calculateHLLDSubParameters(
+    void setFanParametersFromComponents(
         const Components components, 
+        FanParameters fanParameters
+    );
+
+    void calculateHLLDSubParametersForMiddleFan(
+        const Components components, 
+        const FanParameters outerFanParameters, 
         HLLDParameters hLLDParameters
     );
 
     void calculateHLLDParameters1(
-        const Components components, 
+        const FanParameters outerFanParameters, 
         const HLLDParameters hLLDParameters, 
-        FanParameters outerFanParameters
+        FanParameters middleFanParameters
     );
 
     void calculateHLLDParameters2(
@@ -111,6 +106,9 @@ private:
         FanParameters innerRightFanParameters
     );
 
-    void setFlux();
+    void setFlux(
+        const FanParameters fanParameters, 
+        Flux flux
+    );
 };
 

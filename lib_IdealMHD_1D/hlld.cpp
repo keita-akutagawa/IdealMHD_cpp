@@ -1,9 +1,10 @@
 #include <vector>
+#include <cmath>
 #include "const.hpp"
 #include "hlld.hpp"
 
 
-inline double sign(double x)
+inline double HLLD::sign(double x)
 {
     return (x > 0.0) - (x < 0.0);
 }
@@ -68,9 +69,34 @@ void HLLD::calculateFlux(
 )
 {
     setComponents(U);
+    calculateHLLDParametersForOuterFan();
     calculateHLLDParametersForMiddleFan();
     calculateHLLDParametersForInnerFan();
-    //setFlux();
+
+    setFlux(outerLeftFanParameters, fluxOuterLeft);
+    setFlux(outerRightFanParameters, fluxOuterRight);
+    setFlux(middleLeftFanParameters, fluxMiddleLeft);
+    setFlux(middleRightFanParameters, fluxMiddleRight);
+    setFlux(innerLeftFanParameters, fluxInnerLeft);
+    setFlux(innerRightFanParameters, fluxInnerRight);
+
+    double SL, SR, S1L, S1R, SM;
+    for (int comp = 0; comp < 8; comp++) {
+        for (int i = 0; i < nx; i++) {
+            SL = hLLDLeftParameters.S[i];
+            S1L = hLLDLeftParameters.S1[i];
+            SM = hLLDLeftParameters.SM[i]; //hLLDRightParametersでもOK
+            SR = hLLDRightParameters.S[i];
+            S1R = hLLDRightParameters.S1[i];
+
+            flux.flux[comp][i] = fluxOuterLeft.flux[comp][i] * (SL > 0.0)
+                               + fluxMiddleLeft.flux[comp][i] * ((SL <= 0.0) && (0.0 < S1L))
+                               + fluxInnerLeft.flux[comp][i] * ((S1L <= 0.0) && (0.0 < SM))
+                               + fluxOuterRight.flux[comp][i] * (SR <= 0.0)
+                               + fluxMiddleRight.flux[comp][i] * ((S1R <= 0.0) && (0.0 < SR))
+                               + fluxInnerRight.flux[comp][i] * ((SM <= 0.0) && (0.0 < S1R));
+        }
+    }
 
 }
 
@@ -89,49 +115,39 @@ void HLLD::setComponents(
 }
 
 
-void HLLD::calculateHLLDParametersForOuterFan(
-    const Components components
-)
+void HLLD::calculateHLLDParametersForOuterFan()
 {
-    double rho, u, v, w, bx, by, bz, p, e, pT;
-    for (int i = 0; i < nx; i++) {
-        rho = components.rho[i];
-        u = components.u[i];
-        v = components.v[i];
-        w = components.w[i];
-        bx = components.bx[i];
-        by = components.by[i];
-        bz = components.bz[i];
-        p = components.p[i];
-        pT = p + 0.5 * (bx * bx + by * by + bz * bz);
-        e = p / (gamma_mhd - 1.0)
-          + 0.5 * rho * (u * u + v * v + w * w)
-          + 0.5 * (bx * bx + by * by + bz * bz); 
-    }
+    setFanParametersFromComponents(
+        componentsLeft, outerLeftFanParameters
+    );
+    setFanParametersFromComponents(
+        componentsRight, outerRightFanParameters
+    );
 }
 
 
 void HLLD::calculateHLLDParametersForMiddleFan()
 {
-    calculateHLLDSubParameters(
+    calculateHLLDSubParametersForMiddleFan(
         componentsLeft, 
+        outerLeftFanParameters, 
         hLLDLeftParameters
     );
-    calculateHLLDSubParameters(
+    calculateHLLDSubParametersForMiddleFan(
         componentsRight, 
+        outerRightFanParameters, 
         hLLDRightParameters
     );
-
 
     double SL, SR, SM, pT1, pTL, pTR;
     double rho1, u1, v1, w1, bx1, by1, bz1, e1, pT1L, pT1R;
     double rhoL, rhoR, uL, uR, cfL, cfR;
     for (int i = 0; i < nx; i++) {
-        rhoL = componentsLeft.rho[i];
-        rhoR = componentsRight.rho[i];
-        uL = componentsLeft.u[i];
-        uR = componentsRight.u[i];
-        pTL = hLLDLeftParameters.pT[i];
+        rhoL = outerLeftFanParameters.rho[i];
+        rhoR = outerRightFanParameters.rho[i];
+        uL = outerLeftFanParameters.u[i];
+        uR = outerRightFanParameters.u[i];
+        pTL = hLLDLeftParameters.pT[i]; //outerLeftFanParametersでもOK
         pTR = hLLDRightParameters.pT[i];
         cfL = hLLDLeftParameters.cf[i];
         cfR = hLLDRightParameters.cf[i];
@@ -158,10 +174,14 @@ void HLLD::calculateHLLDParametersForMiddleFan()
     }
 
     calculateHLLDParameters1(
-        componentsLeft, hLLDLeftParameters, outerLeftFanParameters
+        outerLeftFanParameters, 
+        hLLDLeftParameters, 
+        middleLeftFanParameters
     );
     calculateHLLDParameters1(
-        componentsRight, hLLDRightParameters, outerRightFanParameters
+        outerRightFanParameters, 
+        hLLDRightParameters, 
+        middleRightFanParameters
     );
 }
 
@@ -171,9 +191,9 @@ void HLLD::calculateHLLDParametersForInnerFan()
     double S1L, S1R, SM, rho1L, rho1R, bx1;
     for (int i = 0; i < nx; i++) {
         SM = hLLDLeftParameters.SM[i]; //RightでもOK
-        rho1L = outerLeftFanParameters.rho[i];
-        rho1R = outerRightFanParameters.rho[i];
-        bx1 = outerLeftFanParameters.bx[i]; //RightでもOK
+        rho1L = middleLeftFanParameters.rho[i];
+        rho1R = middleRightFanParameters.rho[i];
+        bx1 = middleLeftFanParameters.bx[i]; //RightでもOK
 
         S1L = SM - sqrt(bx1 * bx1 / rho1L);
         S1R = SM + sqrt(bx1 * bx1 / rho1R);
@@ -183,8 +203,8 @@ void HLLD::calculateHLLDParametersForInnerFan()
     }
 
     calculateHLLDParameters2(
-        outerLeftFanParameters, 
-        outerRightFanParameters, 
+        middleLeftFanParameters, 
+        middleRightFanParameters, 
         innerLeftFanParameters, 
         innerRightFanParameters
     );
@@ -192,13 +212,12 @@ void HLLD::calculateHLLDParametersForInnerFan()
 }
 
 
-void HLLD::calculateHLLDSubParameters(
+void HLLD::setFanParametersFromComponents(
     const Components components, 
-    HLLDParameters hLLDParameters
+    FanParameters fanParameters
 )
 {
-    double rho, u, v, w, bx, by, bz, p;
-    double pT, e, cs, ca, va, cf;
+    double rho, u, v, w, bx, by, bz, p, e, pT;
     for (int i = 0; i < nx; i++) {
         rho = components.rho[i];
         u = components.u[i];
@@ -208,11 +227,45 @@ void HLLD::calculateHLLDSubParameters(
         by = components.by[i];
         bz = components.bz[i];
         p = components.p[i];
-
-        pT = p + 0.5 * (bx * bx + by * by + bz * bz);
         e = p / (gamma_mhd - 1.0)
           + 0.5 * rho * (u * u + v * v + w * w)
-          + 0.5 * (bx * bx + by * by + bz * bz);
+          + 0.5 * (bx * bx + by * by + bz * bz); 
+        pT = p + 0.5 * (bx * bx + by * by + bz * bz);
+        
+        fanParameters.rho[i] = rho;
+        fanParameters.u[i] = u;
+        fanParameters.v[i] = v;
+        fanParameters.w[i] = w;
+        fanParameters.bx[i] = bx;
+        fanParameters.by[i] = by;
+        fanParameters.bz[i] = bz;
+        fanParameters.e[i] = e;
+        fanParameters.pT[i] = pT;
+    }
+}
+
+
+void HLLD::calculateHLLDSubParametersForMiddleFan(
+    const Components components,
+    const FanParameters outerFanParameters, 
+    HLLDParameters hLLDParameters
+)
+{
+    double rho, u, v, w, bx, by, bz, e, pT, p;
+    double cs, ca, va, cf;
+    for (int i = 0; i < nx; i++) {
+        rho = outerFanParameters.rho[i];
+        u = outerFanParameters.u[i];
+        v = outerFanParameters.v[i];
+        w = outerFanParameters.w[i];
+        bx = outerFanParameters.bx[i];
+        by = outerFanParameters.by[i];
+        bz = outerFanParameters.bz[i];
+        e = outerFanParameters.e[i];
+        pT = outerFanParameters.pT[i];
+
+        p = components.p[i];
+
         cs = sqrt(gamma_mhd * p / rho);
         ca = sqrt((bx * bx + by * by + bz * bz) / rho);
         va = sqrt(bx * bx / rho);
@@ -231,21 +284,21 @@ void HLLD::calculateHLLDSubParameters(
 
 
 void HLLD::calculateHLLDParameters1(
-    const Components components, 
+    const FanParameters outerFanParameters, 
     const HLLDParameters hlldParameters, 
-    FanParameters outerFanParameters
+    FanParameters middleFanParameters
 )
 {
     double rho, u, v, w, bx, by, bz, e, pT, pT1, S, SM;
     double rho1, u1, v1, w1, bx1, by1, bz1, e1;
     for (int i = 0; i < nx; i++) {
-        rho = components.rho[i];
-        u = components.u[i];
-        v = components.v[i];
-        w = components.w[i];
-        bx = components.bx[i];
-        by = components.by[i];
-        bz = components.bz[i];
+        rho = outerFanParameters.rho[i];
+        u = outerFanParameters.u[i];
+        v = outerFanParameters.v[i];
+        w = outerFanParameters.w[i];
+        bx = outerFanParameters.bx[i];
+        by = outerFanParameters.by[i];
+        bz = outerFanParameters.bz[i];
 
         e = hlldParameters.e[i];
         pT = hlldParameters.pT[i];
@@ -266,49 +319,52 @@ void HLLD::calculateHLLDParameters1(
            + bx * ((u * bx + v * by + w * bz) - (u1 * bx1 + v1 * by1 + w1 * bz1)))
            / (S - SM + EPS);
         
-        outerFanParameters.rho[i] = rho1;
-        outerFanParameters.u[i] = u1;
-        outerFanParameters.v[i] = v1;
-        outerFanParameters.w[i] = w1;
-        outerFanParameters.bx[i] = bx1;
-        outerFanParameters.by[i] = by1;
-        outerFanParameters.bz[i] = bz1;
-        outerFanParameters.e[i] = e1;
+        middleFanParameters.rho[i] = rho1;
+        middleFanParameters.u[i] = u1;
+        middleFanParameters.v[i] = v1;
+        middleFanParameters.w[i] = w1;
+        middleFanParameters.bx[i] = bx1;
+        middleFanParameters.by[i] = by1;
+        middleFanParameters.bz[i] = bz1;
+        middleFanParameters.e[i] = e1;
+        middleFanParameters.pT[i] = pT1;
     }
 }
 
 
 void HLLD::calculateHLLDParameters2(
-    const FanParameters outerLeftFanParameters,
-    const FanParameters outerRightFanParameters, 
+    const FanParameters middleLeftFanParameters,
+    const FanParameters middleRightFanParameters, 
     FanParameters innerLeftFanParameters, 
     FanParameters innerRightFanParameters
 )
 {
-    double rho1L, u1L, v1L, w1L, bx1L, by1L, bz1L, e1L;
-    double rho1R, u1R, v1R, w1R, bx1R, by1R, bz1R, e1R;
+    double rho1L, u1L, v1L, w1L, bx1L, by1L, bz1L, e1L, pT1L;
+    double rho1R, u1R, v1R, w1R, bx1R, by1R, bz1R, e1R, pT1R;
     double SM;
-    double rho2L, u2L, v2L, w2L, bx2L, by2L, bz2L, e2L;
-    double rho2R, u2R, v2R, w2R, bx2R, by2R, bz2R, e2R;
+    double rho2L, u2L, v2L, w2L, bx2L, by2L, bz2L, e2L, pT2L;
+    double rho2R, u2R, v2R, w2R, bx2R, by2R, bz2R, e2R, pT2R;
 
     for (int i = 0; i < nx; i++) {
-        rho1L = outerLeftFanParameters.rho[i];
-        u1L = outerLeftFanParameters.u[i];
-        v1L = outerLeftFanParameters.v[i];
-        w1L = outerLeftFanParameters.w[i];
-        bx1L = outerLeftFanParameters.bx[i];
-        by1L = outerLeftFanParameters.by[i];
-        bz1L = outerLeftFanParameters.bz[i];
-        e1L = outerLeftFanParameters.e[i];
+        rho1L = middleLeftFanParameters.rho[i];
+        u1L = middleLeftFanParameters.u[i];
+        v1L = middleLeftFanParameters.v[i];
+        w1L = middleLeftFanParameters.w[i];
+        bx1L = middleLeftFanParameters.bx[i];
+        by1L = middleLeftFanParameters.by[i];
+        bz1L = middleLeftFanParameters.bz[i];
+        e1L = middleLeftFanParameters.e[i];
+        pT1L = middleLeftFanParameters.pT[i];
         
-        rho1R = outerRightFanParameters.rho[i];
-        u1R = outerRightFanParameters.u[i];
-        v1R = outerRightFanParameters.v[i];
-        w1R = outerRightFanParameters.w[i];
-        bx1R = outerRightFanParameters.bx[i];
-        by1R = outerRightFanParameters.by[i];
-        bz1R = outerRightFanParameters.bz[i];
-        e1R = outerRightFanParameters.e[i];
+        rho1R = middleRightFanParameters.rho[i];
+        u1R = middleRightFanParameters.u[i];
+        v1R = middleRightFanParameters.v[i];
+        w1R = middleRightFanParameters.w[i];
+        bx1R = middleRightFanParameters.bx[i];
+        by1R = middleRightFanParameters.by[i];
+        bz1R = middleRightFanParameters.bz[i];
+        e1R = middleRightFanParameters.e[i];
+        pT1R = middleRightFanParameters.pT[i];
 
         rho2L = rho1L;
         rho2R = rho1R;
@@ -334,7 +390,8 @@ void HLLD::calculateHLLDParameters2(
         e2R = e1R + sqrt(rho1R)
             * ((u1R * bx1R + v1R * by1R + w1R * bz1R) - (u2R * bx2R + v2R * by2R + w2R * bz2R))
             * sign(bx2R);
-        
+        pT2L = pT1L;
+        pT2R = pT1R;
 
         innerLeftFanParameters.rho[i] = rho2L;
         innerLeftFanParameters.u[i] = u2L;
@@ -344,6 +401,7 @@ void HLLD::calculateHLLDParameters2(
         innerLeftFanParameters.by[i] = by2L;
         innerLeftFanParameters.bz[i] = bz2L;
         innerLeftFanParameters.e[i] = e2L;
+        innerLeftFanParameters.pT[i] = pT2L;
 
         innerRightFanParameters.rho[i] = rho2R;
         innerRightFanParameters.u[i] = u2R;
@@ -353,25 +411,36 @@ void HLLD::calculateHLLDParameters2(
         innerRightFanParameters.by[i] = by2R;
         innerRightFanParameters.bz[i] = bz2R;
         innerRightFanParameters.e[i] = e2R;
+        innerRightFanParameters.pT[i] = pT2R;
     }
 }
 
 
-void HLLD::setFlux()
+void HLLD::setFlux(
+    const FanParameters fanParameters, 
+    Flux flux
+)
 {
     double rho, u, v, w, bx, by, bz, p, e;
     double pT;
     for (int i = 0; i < nx; i++) {
-        rho = componentsLeft.rho[i];
-        u = componentsLeft.u[i];
-        v = componentsLeft.v[i];
-        w = componentsLeft.w[i];
-        bx = componentsLeft.bx[i];
-        by = componentsLeft.by[i];
-        bz = componentsLeft.bz[i];
-        p = componentsLeft.p[i];
-        e = p / (gamma_mhd - 1.0)
-          + 0.5 * rho * (u * u + v * v + w * w)
-          + 0.5 * (bx * bx + by * by + bz * bz);
+        rho = fanParameters.rho[i];
+        u = fanParameters.u[i];
+        v = fanParameters.v[i];
+        w = fanParameters.w[i];
+        bx = fanParameters.bx[i];
+        by = fanParameters.by[i];
+        bz = fanParameters.bz[i];
+        e = fanParameters.e[i];
+        pT = fanParameters.pT[i];
+
+        flux.flux[0][i] = rho * u;
+        flux.flux[1][i] = rho * u * u + pT - bx * bx;
+        flux.flux[2][i] = rho * u * v - bx * by;
+        flux.flux[3][i] = rho * u * w - bx * bz;
+        flux.flux[4][i] = 0.0;
+        flux.flux[5][i] = u * by - v * bx;
+        flux.flux[6][i] = u * bz - w * bx;
+        flux.flux[7][i] = (e + pT) * u - bx * (bx * u + by * v + bz * w);
     }
 }
