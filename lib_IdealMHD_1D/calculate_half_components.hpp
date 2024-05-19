@@ -15,6 +15,8 @@ struct Components
     std::vector<double> by;
     std::vector<double> bz;
     std::vector<double> p;
+
+    Components();
 };
 
 
@@ -27,10 +29,7 @@ private:
     Components componentsLeft;
     Components componentsRight;
 
-    std::vector<double> tmpVector;
-
 public:
-    CalculateHalfComponents();
 
     void setPhysicalParameters(
         const std::vector<std::vector<double>> U

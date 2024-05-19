@@ -17,6 +17,8 @@ struct FanParameters
     std::vector<double> bz;
     std::vector<double> e;
     std::vector<double> pT;
+
+    FanParameters();
 };
 
 struct HLLDParameters
@@ -32,11 +34,15 @@ struct HLLDParameters
     std::vector<double> S;
     std::vector<double> S1;
     std::vector<double> SM;
+
+    HLLDParameters();
 };
 
 struct Flux
 {
     std::vector<std::vector<double>> flux;
+
+    Flux();
 };
 
 
@@ -63,11 +69,12 @@ private:
     Flux fluxOuterRight, fluxMiddleRight, fluxInnerRight;
 
 public:
-    HLLD();
 
     void calculateFlux(
         const std::vector<std::vector<double>> U
     );
+
+    Flux getFlux();
 
 private:
     double sign(double x);

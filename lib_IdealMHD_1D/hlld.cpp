@@ -1,5 +1,6 @@
 #include <vector>
 #include <cmath>
+#include <algorithm>
 #include "const.hpp"
 #include "hlld.hpp"
 
@@ -10,57 +11,39 @@ inline double HLLD::sign(double x)
 }
 
 
-HLLD::HLLD()
+FanParameters::FanParameters()
 {
-    CalculateHalfComponents calculateHalfComponents;
+    rho = std::vector<double>(nx, 0.0);
+    u = std::vector<double>(nx, 0.0);
+    v = std::vector<double>(nx, 0.0);
+    w = std::vector<double>(nx, 0.0);
+    bx = std::vector<double>(nx, 0.0);
+    by = std::vector<double>(nx, 0.0);
+    bz = std::vector<double>(nx, 0.0);
+    e = std::vector<double>(nx, 0.0);
+    pT = std::vector<double>(nx, 0.0);
+}
 
-    componentsCenter.rho = std::vector<double>(nx, 0.0);
-    componentsCenter.u = std::vector<double>(nx, 0.0);
-    componentsCenter.v = std::vector<double>(nx, 0.0);
-    componentsCenter.w = std::vector<double>(nx, 0.0);
-    componentsCenter.bx = std::vector<double>(nx, 0.0);
-    componentsCenter.by = std::vector<double>(nx, 0.0);
-    componentsCenter.bz = std::vector<double>(nx, 0.0);
-    componentsCenter.p = std::vector<double>(nx, 0.0);
 
-    outerLeftFanParameters.rho = std::vector<double>(nx, 0.0);
-    outerLeftFanParameters.u = std::vector<double>(nx, 0.0);
-    outerLeftFanParameters.v = std::vector<double>(nx, 0.0);
-    outerLeftFanParameters.w = std::vector<double>(nx, 0.0);
-    outerLeftFanParameters.bx = std::vector<double>(nx, 0.0);
-    outerLeftFanParameters.by = std::vector<double>(nx, 0.0);
-    outerLeftFanParameters.bz = std::vector<double>(nx, 0.0);
-    outerLeftFanParameters.e = std::vector<double>(nx, 0.0);
+HLLDParameters::HLLDParameters()
+{
+    pT = std::vector<double>(nx, 0.0);
+    pT1 = std::vector<double>(nx, 0.0);
+    pT2 = std::vector<double>(nx, 0.0);
+    e = std::vector<double>(nx, 0.0);
+    cs = std::vector<double>(nx, 0.0);
+    ca = std::vector<double>(nx, 0.0);
+    va = std::vector<double>(nx, 0.0);
+    cf = std::vector<double>(nx, 0.0);
+    S = std::vector<double>(nx, 0.0);
+    S1 = std::vector<double>(nx, 0.0);
+    SM = std::vector<double>(nx, 0.0);
+}
 
-    outerRightFanParameters.rho = std::vector<double>(nx, 0.0);
-    outerRightFanParameters.u = std::vector<double>(nx, 0.0);
-    outerRightFanParameters.v = std::vector<double>(nx, 0.0);
-    outerRightFanParameters.w = std::vector<double>(nx, 0.0);
-    outerRightFanParameters.bx = std::vector<double>(nx, 0.0);
-    outerRightFanParameters.by = std::vector<double>(nx, 0.0);
-    outerRightFanParameters.bz = std::vector<double>(nx, 0.0);
-    outerRightFanParameters.e = std::vector<double>(nx, 0.0);
 
-    innerLeftFanParameters.rho = std::vector<double>(nx, 0.0);
-    innerLeftFanParameters.u = std::vector<double>(nx, 0.0);
-    innerLeftFanParameters.v = std::vector<double>(nx, 0.0);
-    innerLeftFanParameters.w = std::vector<double>(nx, 0.0);
-    innerLeftFanParameters.bx = std::vector<double>(nx, 0.0);
-    innerLeftFanParameters.by = std::vector<double>(nx, 0.0);
-    innerLeftFanParameters.bz = std::vector<double>(nx, 0.0);
-    innerLeftFanParameters.e = std::vector<double>(nx, 0.0);
-
-    innerRightFanParameters.rho = std::vector<double>(nx, 0.0);
-    innerRightFanParameters.u = std::vector<double>(nx, 0.0);
-    innerRightFanParameters.v = std::vector<double>(nx, 0.0);
-    innerRightFanParameters.w = std::vector<double>(nx, 0.0);
-    innerRightFanParameters.bx = std::vector<double>(nx, 0.0);
-    innerRightFanParameters.by = std::vector<double>(nx, 0.0);
-    innerRightFanParameters.bz = std::vector<double>(nx, 0.0);
-    innerRightFanParameters.e = std::vector<double>(nx, 0.0);
-
-    std::vector<std::vector<double>> flux(8, std::vector<double>(nx, 0.0));
-
+Flux::Flux()
+{
+    flux = std::vector(8, std::vector<double>(nx, 0.0));
 }
 
 
@@ -100,6 +83,11 @@ void HLLD::calculateFlux(
 
 }
 
+
+Flux HLLD::getFlux()
+{
+    return flux;
+}
 
 
 void HLLD::setComponents(

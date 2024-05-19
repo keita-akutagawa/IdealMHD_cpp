@@ -4,38 +4,16 @@
 #include "calculate_half_components.hpp"
 
 
-CalculateHalfComponents::CalculateHalfComponents()
+Components::Components()
 {
-    MUSCL muscl;
-
-    componentsCenter.rho = std::vector<double>(nx, 0.0);
-    componentsCenter.u = std::vector<double>(nx, 0.0);
-    componentsCenter.v = std::vector<double>(nx, 0.0);
-    componentsCenter.w = std::vector<double>(nx, 0.0);
-    componentsCenter.bx = std::vector<double>(nx, 0.0);
-    componentsCenter.by = std::vector<double>(nx, 0.0);
-    componentsCenter.bz = std::vector<double>(nx, 0.0);
-    componentsCenter.p = std::vector<double>(nx, 0.0);
-
-    componentsLeft.rho = std::vector<double>(nx, 0.0);
-    componentsLeft.u = std::vector<double>(nx, 0.0);
-    componentsLeft.v = std::vector<double>(nx, 0.0);
-    componentsLeft.w = std::vector<double>(nx, 0.0);
-    componentsLeft.bx = std::vector<double>(nx, 0.0);
-    componentsLeft.by = std::vector<double>(nx, 0.0);
-    componentsLeft.bz = std::vector<double>(nx, 0.0);
-    componentsLeft.p = std::vector<double>(nx, 0.0);
-
-    componentsRight.rho = std::vector<double>(nx, 0.0);
-    componentsRight.u = std::vector<double>(nx, 0.0);
-    componentsRight.v = std::vector<double>(nx, 0.0);
-    componentsRight.w = std::vector<double>(nx, 0.0);
-    componentsRight.bx = std::vector<double>(nx, 0.0);
-    componentsRight.by = std::vector<double>(nx, 0.0);
-    componentsRight.bz = std::vector<double>(nx, 0.0);
-    componentsRight.p = std::vector<double>(nx, 0.0);
-
-    tmpVector = std::vector<double>(nx, 0.0);
+    rho = std::vector<double>(nx, 0.0);
+    u = std::vector<double>(nx, 0.0);
+    v = std::vector<double>(nx, 0.0);
+    w = std::vector<double>(nx, 0.0);
+    bx = std::vector<double>(nx, 0.0);
+    by = std::vector<double>(nx, 0.0);
+    bz = std::vector<double>(nx, 0.0);
+    p = std::vector<double>(nx, 0.0);
 }
 
 
