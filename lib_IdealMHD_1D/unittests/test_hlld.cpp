@@ -12,8 +12,10 @@ TEST(HLLDTest, Constructor)
 
     flux = hlld.getFlux();
 
-    for (int i = 0; i < nx; i++) {
-        EXPECT_EQ(flux.flux[0][i], 0.0);
+    for (int comp = 0; comp < 8; comp++) {
+        for (int i = 0; i < nx; i++) {
+            EXPECT_EQ(flux.flux[comp][i], 0.0);
+        }
     }
 }
 
