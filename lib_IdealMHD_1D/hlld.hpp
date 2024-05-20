@@ -74,6 +74,12 @@ public:
         const std::vector<std::vector<double>> U
     );
 
+    Components getComponents();
+
+    FanParameters getFanParameters();
+
+    HLLDParameters getHLLDParameters();
+
     Flux getFlux();
 
 private:
@@ -91,31 +97,31 @@ private:
 
     void setFanParametersFromComponents(
         const Components components, 
-        FanParameters fanParameters
+        FanParameters& fanParameters
     );
 
     void calculateHLLDSubParametersForMiddleFan(
         const Components components, 
         const FanParameters outerFanParameters, 
-        HLLDParameters hLLDParameters
+        HLLDParameters& hLLDParameters
     );
 
     void calculateHLLDParameters1(
         const FanParameters outerFanParameters, 
         const HLLDParameters hLLDParameters, 
-        FanParameters middleFanParameters
+        FanParameters& middleFanParameters
     );
 
     void calculateHLLDParameters2(
         const FanParameters outerLeftFanParameters,
         const FanParameters outerRightFanParameters, 
-        FanParameters innerLeftFanParameters, 
-        FanParameters innerRightFanParameters
+        FanParameters& innerLeftFanParameters, 
+        FanParameters& innerRightFanParameters
     );
 
     void setFlux(
         const FanParameters fanParameters, 
-        Flux flux
+        Flux& flux
     );
 };
 

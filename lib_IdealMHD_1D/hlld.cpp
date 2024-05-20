@@ -1,5 +1,6 @@
 #include <vector>
 #include <cmath>
+#include <iostream>
 #include <algorithm>
 #include "const.hpp"
 #include "hlld.hpp"
@@ -80,9 +81,23 @@ void HLLD::calculateFlux(
                                + fluxInnerRight.flux[comp][i] * ((SM <= 0.0) && (0.0 < S1R));
         }
     }
-
 }
 
+
+Components HLLD::getComponents()
+{
+    return componentsLeft;
+}
+
+FanParameters HLLD::getFanParameters()
+{
+    return outerRightFanParameters;
+}
+
+HLLDParameters HLLD::getHLLDParameters()
+{
+    return hLLDLeftParameters;
+}
 
 Flux HLLD::getFlux()
 {
@@ -98,6 +113,7 @@ void HLLD::setComponents(
     calculateHalfComponents.calculateLeftComponents();
     calculateHalfComponents.calculateRightComponents();
 
+    componentsCenter = calculateHalfComponents.getCenterComponents();
     componentsLeft = calculateHalfComponents.getLeftComponents();
     componentsRight = calculateHalfComponents.getRightComponents();
 }
@@ -202,7 +218,7 @@ void HLLD::calculateHLLDParametersForInnerFan()
 
 void HLLD::setFanParametersFromComponents(
     const Components components, 
-    FanParameters fanParameters
+    FanParameters& fanParameters
 )
 {
     double rho, u, v, w, bx, by, bz, p, e, pT;
@@ -236,7 +252,7 @@ void HLLD::setFanParametersFromComponents(
 void HLLD::calculateHLLDSubParametersForMiddleFan(
     const Components components,
     const FanParameters outerFanParameters, 
-    HLLDParameters hLLDParameters
+    HLLDParameters& hLLDParameters
 )
 {
     double rho, u, v, w, bx, by, bz, e, pT, p;
@@ -274,7 +290,7 @@ void HLLD::calculateHLLDSubParametersForMiddleFan(
 void HLLD::calculateHLLDParameters1(
     const FanParameters outerFanParameters, 
     const HLLDParameters hlldParameters, 
-    FanParameters middleFanParameters
+    FanParameters& middleFanParameters
 )
 {
     double rho, u, v, w, bx, by, bz, e, pT, pT1, S, SM;
@@ -323,8 +339,8 @@ void HLLD::calculateHLLDParameters1(
 void HLLD::calculateHLLDParameters2(
     const FanParameters middleLeftFanParameters,
     const FanParameters middleRightFanParameters, 
-    FanParameters innerLeftFanParameters, 
-    FanParameters innerRightFanParameters
+    FanParameters& innerLeftFanParameters, 
+    FanParameters& innerRightFanParameters
 )
 {
     double rho1L, u1L, v1L, w1L, bx1L, by1L, bz1L, e1L, pT1L;
@@ -406,7 +422,7 @@ void HLLD::calculateHLLDParameters2(
 
 void HLLD::setFlux(
     const FanParameters fanParameters, 
-    Flux flux
+    Flux& flux
 )
 {
     double rho, u, v, w, bx, by, bz, p, e;
