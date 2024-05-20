@@ -8,9 +8,12 @@ class IdealMHD1D
 private:
     FluxSolver fluxSolver;
     std::vector<std::vector<double>> U;
+    std::vector<std::vector<double>> UBar;
+    Flux fluxF;
+    Flux fluxFBar;
 
 public:
-    void setU(
+    void initializeU(
         const std::vector<std::vector<double>> UInit
     ); 
     void oneStepRK2();

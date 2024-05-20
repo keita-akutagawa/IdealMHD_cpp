@@ -8,7 +8,7 @@
 #include "idealMHD_1D.hpp"
 
 
-void IdealMHD1D::setU(
+void IdealMHD1D::initializeU(
     const std::vector<std::vector<double>> UInit
 )
 {
@@ -26,7 +26,14 @@ void IdealMHD1D::oneStepRK2()
         std::copy(U[comp].begin(), U[comp].end(), UBar[comp].begin());
     }
     calculateDt();
+
     fluxF = fluxSolver.getFluxF(U);
+
+    for (int comp = 0; comp < 8; comp++) {
+        for (int i = 0; i < nx; i++) {
+            UB
+        }
+    }
 
 }
 
