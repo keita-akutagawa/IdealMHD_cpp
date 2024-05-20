@@ -84,27 +84,6 @@ void HLLD::calculateFlux(
 }
 
 
-Components HLLD::getComponents()
-{
-    return componentsLeft;
-}
-
-FanParameters HLLD::getFanParameters()
-{
-    return outerRightFanParameters;
-}
-
-HLLDParameters HLLD::getHLLDParameters()
-{
-    return hLLDLeftParameters;
-}
-
-Flux HLLD::getFlux()
-{
-    return flux;
-}
-
-
 void HLLD::setComponents(
     const std::vector<std::vector<double>> U
 )
@@ -447,4 +426,61 @@ void HLLD::setFlux(
         flux.flux[6][i] = u * bz - w * bx;
         flux.flux[7][i] = (e + pT) * u - bx * (bx * u + by * v + bz * w);
     }
+}
+
+// getter
+
+Components HLLD::getLeftComponents()
+{
+    return componentsLeft;
+}
+
+Components HLLD::getRightComponents()
+{
+    return componentsRight;
+}
+
+FanParameters HLLD::getOuterLeftFanParameters()
+{
+    return outerLeftFanParameters;
+}
+
+FanParameters HLLD::getOuterRightFanParameters()
+{
+    return outerRightFanParameters;
+}
+
+FanParameters HLLD::getMiddleLeftFanParameters()
+{
+    return middleLeftFanParameters;
+}
+
+FanParameters HLLD::getMiddleRightFanParameters()
+{
+    return middleRightFanParameters;
+}
+
+FanParameters HLLD::getInnerLeftFanParameters()
+{
+    return innerLeftFanParameters;
+}
+
+FanParameters HLLD::getInnerRightFanParameters()
+{
+    return innerRightFanParameters;
+}
+
+HLLDParameters HLLD::getHLLDLeftParameters()
+{
+    return hLLDLeftParameters;
+}
+
+HLLDParameters HLLD::getHLLDRightParameters()
+{
+    return hLLDRightParameters;
+}
+
+Flux HLLD::getFlux()
+{
+    return flux;
 }

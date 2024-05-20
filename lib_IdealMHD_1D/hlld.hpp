@@ -74,11 +74,18 @@ public:
         const std::vector<std::vector<double>> U
     );
 
-    Components getComponents();
+    Components getLeftComponents();
+    Components getRightComponents();
 
-    FanParameters getFanParameters();
+    FanParameters getOuterLeftFanParameters();
+    FanParameters getOuterRightFanParameters();
+    FanParameters getMiddleLeftFanParameters();
+    FanParameters getMiddleRightFanParameters();
+    FanParameters getInnerLeftFanParameters();
+    FanParameters getInnerRightFanParameters();
 
-    HLLDParameters getHLLDParameters();
+    HLLDParameters getHLLDLeftParameters();
+    HLLDParameters getHLLDRightParameters();
 
     Flux getFlux();
 
