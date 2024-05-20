@@ -22,7 +22,9 @@ void IdealMHD1D::setU(
 
 void IdealMHD1D::oneStepRK2()
 {
-    
+    for (int comp = 0; comp < 8; comp++) {
+        std::copy(U[comp].begin(), U[comp].end(), UBar[comp].begin());
+    }
     calculateDt();
     fluxF = fluxSolver.getFluxF(U);
 
