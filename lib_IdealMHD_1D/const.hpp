@@ -7,4 +7,5 @@ extern const double xmax;
 extern const int nx;
 extern const double CFL;
 extern const double gamma_mhd;
+extern double dt;
 
