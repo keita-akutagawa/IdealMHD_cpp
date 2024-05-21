@@ -5,4 +5,5 @@ pictures*/
 results*/
 *.exe
 *.out
+*.o
 googletest/
