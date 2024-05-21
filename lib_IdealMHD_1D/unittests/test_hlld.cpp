@@ -3,6 +3,7 @@
 #include "../const.hpp"
 #include <algorithm>
 #include <vector>
+#include <cmath>
 
 
 TEST(HLLDTest, CheckStructConstructor)
@@ -111,7 +112,7 @@ TEST(HLLDTest, CalculateFlux)
 }
 
 
-TEST(HLLDTest, CalculateFluxShockTube)
+TEST(HLLDTest, CalculateFluxDiscontinuity)
 {
     double rhoL0, uL0, vL0, wL0, bxL0, byL0, bzL0, pL0, eL0;
     double rhoR0, uR0, vR0, wR0, bxR0, byR0, bzR0, pR0, eR0;
@@ -165,9 +166,12 @@ TEST(HLLDTest, CalculateFluxShockTube)
     
     flux = hLLD.getFlux();
 
-    for (int i = 0; i < nx; i++) {
-        EXPECT_NE(flux.flux[0][i], 0.0); //flux.flux[4][i]は0.0
+    for (int comp = 0; comp < 8; comp++) {
+        for (int i = 0; i < nx; i++) {
+            EXPECT_FALSE(std::isnan(flux.flux[comp][i]));
+        }
     }
+    
 }
 
 

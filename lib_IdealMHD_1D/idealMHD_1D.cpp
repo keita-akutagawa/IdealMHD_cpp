@@ -32,6 +32,7 @@ void IdealMHD1D::oneStepRK2()
     for (int comp = 0; comp < 8; comp++) {
         std::copy(U[comp].begin(), U[comp].end(), UBar[comp].begin());
     }
+
     calculateDt();
 
     fluxF = fluxSolver.getFluxF(U);
@@ -46,6 +47,9 @@ void IdealMHD1D::oneStepRK2()
                       - dt / dx * (fluxF.flux[comp][0] - fluxF.flux[comp][nx-1]);
     }
 
+    //これはどうにかすること。保守性が低い
+    boundary.symmetricBoundary2nd(UBar);
+
     fluxF = fluxSolver.getFluxF(UBar);
 
     for (int comp = 0; comp < 8; comp++) {
@@ -55,8 +59,11 @@ void IdealMHD1D::oneStepRK2()
         }
         //周期境界条件
         U[comp][0] = 0.5 * (U[comp][0] + UBar[comp][0]
-                       - dt / dx * (fluxF.flux[comp][0] - fluxF.flux[comp][nx-1]));
+                   - dt / dx * (fluxF.flux[comp][0] - fluxF.flux[comp][nx-1]));
     }
+
+    //これはどうにかすること。保守性が低い
+    boundary.symmetricBoundary2nd(U);
 }
 
 
@@ -69,15 +76,16 @@ void IdealMHD1D::save(
     std::string filename;
     filename = directoryname + "/"
              + filenameWithoutStep + "_" + std::to_string(step)
-             + ".csv";
+             + ".txt";
 
     std::ofstream ofs(filename);
     ofs << std::fixed << std::setprecision(6);
 
     for (int comp = 0; comp < 8; comp++) {
-        for (int i = 0; i < nx; i++) {
+        for (int i = 0; i < nx-1; i++) {
             ofs << U[comp][i] << ",";
         }
+        ofs << U[comp][nx-1];
         ofs << std::endl;
     }
 }
@@ -107,7 +115,7 @@ void IdealMHD1D::calculateDt()
 
         maxSpeed = std::abs(u) + sqrt(cs * cs + ca * ca);
 
-        dt = std::min(dt, CFL * 1.0 / (maxSpeed + EPS));
+        dt = std::min(dt, CFL * 1.0 / (maxSpeed / dx + EPS));
     }
 }
 

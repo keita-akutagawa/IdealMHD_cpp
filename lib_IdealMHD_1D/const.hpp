@@ -12,3 +12,4 @@ extern const double gamma_mhd;
 extern double dt;
 
 extern const int totalStep;
+extern double totalTime;

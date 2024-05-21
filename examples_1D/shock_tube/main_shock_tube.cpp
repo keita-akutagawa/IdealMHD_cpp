@@ -1,5 +1,8 @@
 #include <vector>
+#include <string>
 #include <iostream>
+#include <fstream>
+#include <iomanip>
 #include "../../lib_IdealMHD_1D/const.hpp"
 #include "../../lib_IdealMHD_1D/idealMHD_1D.hpp"
 
@@ -11,13 +14,16 @@ const int nx = int((xmax - xmin) / dx);
 const double CFL = 0.7;
 const double gamma_mhd = 5.0 / 3.0;
 double dt = 0.0;
-const int totalStep = 100;
+const int totalStep = 10000;
+double totalTime = 0.0;
 
 
 int main()
 {
     std::string directoryname = "results";
     std::string filenameWithoutStep = "shock_tube";
+    std::ofstream logfile("log.txt");
+    int recordStep = 100;
 
 
     double rhoL0, uL0, vL0, wL0, bxL0, byL0, bzL0, pL0, eL0;
@@ -66,12 +72,18 @@ int main()
 
     idealMHD1D.initializeU(UInit);
 
-    for (int step = 0; step < totalStep; step++) {
-        if (step % 10 == 0) {
+    for (int step = 0; step < totalStep+1; step++) {
+        if (step % recordStep == 0) {
             idealMHD1D.save(directoryname, filenameWithoutStep, step);
+            logfile << std::to_string(step) << ","
+                    << std::setprecision(3) << totalTime
+                    << std::endl;
         }
         idealMHD1D.oneStepRK2();
+        totalTime += dt;
     }
+    
+    return 0;
 }
 
 

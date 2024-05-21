@@ -10,7 +10,7 @@ void MUSCL::getLeftComponent(
     std::vector<double>& qLeft
 )
 {
-    for (int i = 1; i < nx; i++) {
+    for (int i = 1; i < nx-1; i++) {
         qLeft[i] = q[i] + 0.5 * minmod(q[i] - q[i-1], q[i+1] - q[i]);
     }
 
@@ -29,15 +29,15 @@ void MUSCL::getRightComponent(
     std::vector<double>& qRight
 )
 {
-    for (int i = 1; i < nx; i++) {
-        qRight[i] = q[i] - 0.5 * minmod(q[i+1] - q[i], q[i+2] - q[i+1]);
+    for (int i = 0; i < nx-2; i++) {
+        qRight[i] = q[i+1] - 0.5 * minmod(q[i+1] - q[i], q[i+2] - q[i+1]);
     }
 
     //周期境界条件
-    qRight[0] = q[0] + 0.5 * minmod(
-        q[1] - q[0], q[2] - q[1]
+    qRight[nx-2] = q[nx-1] - 0.5 * minmod(
+        q[nx-1] - q[nx-2], q[0] - q[nx-1]
         );
-    qRight[nx-1] = q[nx-1] + 0.5 * minmod(
+    qRight[nx-1] = q[0] - 0.5 * minmod(
         q[0] - q[nx-1], q[1] - q[0]
         );
 }

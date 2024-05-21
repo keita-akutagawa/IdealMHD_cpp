@@ -1,15 +1,17 @@
 #include <vector>
 #include <string>
 #include "flux_solver.hpp"
+#include "boundary.hpp"
 
 
 class IdealMHD1D
 {
 private:
     FluxSolver fluxSolver;
+    Flux fluxF;
     std::vector<std::vector<double>> U;
     std::vector<std::vector<double>> UBar;
-    Flux fluxF;
+    Boundary boundary;
 
 public:
     IdealMHD1D();
