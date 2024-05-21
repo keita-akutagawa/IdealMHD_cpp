@@ -115,8 +115,10 @@ void IdealMHD1D::calculateDt()
 
         maxSpeed = std::abs(u) + sqrt(cs * cs + ca * ca);
 
-        dt = std::min(dt, CFL * 1.0 / (maxSpeed / dx + EPS));
+        dt = std::min(dt, 1.0 / (maxSpeed / dx + EPS));
     }
+    
+    dt *= CFL;
 }
 
 

@@ -1,5 +1,6 @@
 
 extern const double EPS;
+extern const double PI;
 
 extern const double dx;
 extern const double xmin;

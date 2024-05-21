@@ -119,12 +119,7 @@ private:
         FanParameters& middleFanParameters
     );
 
-    void calculateHLLDParameters2(
-        const FanParameters outerLeftFanParameters,
-        const FanParameters outerRightFanParameters, 
-        FanParameters& innerLeftFanParameters, 
-        FanParameters& innerRightFanParameters
-    );
+    void calculateHLLDParameters2();
 
     void setFlux(
         const FanParameters fanParameters, 

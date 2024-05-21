@@ -1,6 +1,6 @@
 CC = g++
 CFLAGS = -std=c++20 -Wall -pedantic-errors -O3 -mtune=native -march=native
-SRCDIR = ../../lib_IdealMHD_1D
+SRCDIR = ../../../lib_IdealMHD_1D
 SOURCES = $(wildcard $(SRCDIR)/*.cpp)
 OBJS = $(patsubst $(SRCDIR)/%.cpp, $(SRCDIR)/%.o, $(SOURCES))
 MAIN = main_shock_tube.o

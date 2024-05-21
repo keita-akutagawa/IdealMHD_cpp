@@ -185,12 +185,7 @@ void HLLD::calculateHLLDParametersForInnerFan()
         hLLDRightParameters.S1[i] = S1R;
     }
 
-    calculateHLLDParameters2(
-        middleLeftFanParameters, 
-        middleRightFanParameters, 
-        innerLeftFanParameters, 
-        innerRightFanParameters
-    );
+    calculateHLLDParameters2();
 
 }
 
@@ -312,12 +307,7 @@ void HLLD::calculateHLLDParameters1(
 }
 
 
-void HLLD::calculateHLLDParameters2(
-    const FanParameters middleLeftFanParameters,
-    const FanParameters middleRightFanParameters, 
-    FanParameters& innerLeftFanParameters, 
-    FanParameters& innerRightFanParameters
-)
+void HLLD::calculateHLLDParameters2()
 {
     double rho1L, u1L, v1L, w1L, bx1L, by1L, bz1L, e1L, pT1L;
     double rho1R, u1R, v1R, w1R, bx1R, by1R, bz1R, e1R, pT1R;
@@ -344,7 +334,6 @@ void HLLD::calculateHLLDParameters2(
         bz1R = middleRightFanParameters.bz[i];
         e1R = middleRightFanParameters.e[i];
         pT1R = middleRightFanParameters.pT[i];
-
 
 
         rho2L = rho1L;
@@ -393,6 +382,9 @@ void HLLD::calculateHLLDParameters2(
         innerRightFanParameters.bz[i] = bz2R;
         innerRightFanParameters.e[i] = e2R;
         innerRightFanParameters.pT[i] = pT2R;
+
+        hLLDLeftParameters.pT2[i] = pT2L;
+        hLLDRightParameters.pT2[i] = pT2R;
     }
 }
 
