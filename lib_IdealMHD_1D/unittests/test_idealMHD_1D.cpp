@@ -3,6 +3,7 @@
 #include "../const.hpp"
 #include <algorithm>
 #include <vector>
+#include <cmath>
 
 
 TEST(IdealMHD1D, initializeU)
@@ -47,7 +48,7 @@ TEST(IdealMHD1D, calculateDt)
 
     idealMHD1D.calculateDt();
 
-    std::cout << dt << std::endl;
+    EXPECT_FALSE(std::isnan(dt));
 }
 
 
