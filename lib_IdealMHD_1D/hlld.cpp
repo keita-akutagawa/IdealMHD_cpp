@@ -123,7 +123,7 @@ void HLLD::calculateHLLDParametersForMiddleFan()
     );
 
     double SL, SR, SM, pT1, pTL, pTR;
-    double rho1, u1, v1, w1, bx1, by1, bz1, e1, pT1L, pT1R;
+    double pT1L, pT1R;
     double rhoL, rhoR, uL, uR, cfL, cfR;
     for (int i = 0; i < nx; i++) {
         rhoL = outerLeftFanParameters.rho[i];
@@ -145,8 +145,8 @@ void HLLD::calculateHLLDParametersForMiddleFan()
         pT1 = ((SR - uR) * rhoR * pTL - (SL - uL) * rhoL * pTR
             + rhoL * rhoR * (SR - uR) * (SL - uL) * (uR - uL))
             / ((SR - uR) * rhoR - (SL - uL) * rhoL + EPS);
-        pT1L = pTL;
-        pT1R = pTR;
+        pT1L = pT1;
+        pT1R = pT1;
 
         hLLDLeftParameters.S[i] = SL;
         hLLDRightParameters.S[i] = SR;
@@ -234,13 +234,10 @@ void HLLD::calculateHLLDSubParametersForMiddleFan(
     HLLDParameters& hLLDParameters
 )
 {
-    double rho, u, v, w, bx, by, bz, e, pT, p;
+    double rho, bx, by, bz, e, pT, p;
     double cs, ca, va, cf;
     for (int i = 0; i < nx; i++) {
         rho = outerFanParameters.rho[i];
-        u = outerFanParameters.u[i];
-        v = outerFanParameters.v[i];
-        w = outerFanParameters.w[i];
         bx = outerFanParameters.bx[i];
         by = outerFanParameters.by[i];
         bz = outerFanParameters.bz[i];
@@ -324,7 +321,6 @@ void HLLD::calculateHLLDParameters2(
 {
     double rho1L, u1L, v1L, w1L, bx1L, by1L, bz1L, e1L, pT1L;
     double rho1R, u1R, v1R, w1R, bx1R, by1R, bz1R, e1R, pT1R;
-    double SM;
     double rho2L, u2L, v2L, w2L, bx2L, by2L, bz2L, e2L, pT2L;
     double rho2R, u2R, v2R, w2R, bx2R, by2R, bz2R, e2R, pT2R;
 
@@ -349,10 +345,12 @@ void HLLD::calculateHLLDParameters2(
         e1R = middleRightFanParameters.e[i];
         pT1R = middleRightFanParameters.pT[i];
 
+
+
         rho2L = rho1L;
         rho2R = rho1R;
-        u2L = SM;
-        u2R = u2L;
+        u2L = u1L;
+        u2R = u1R;
         v2L = (sqrt(rho1L) * v1L + sqrt(rho1R) * v1R + (by1R - by1L) * sign(bx1L))
             / (sqrt(rho1L) + sqrt(rho1R) + EPS);
         v2R = v2L;
@@ -404,7 +402,7 @@ void HLLD::setFlux(
     Flux& flux
 )
 {
-    double rho, u, v, w, bx, by, bz, p, e;
+    double rho, u, v, w, bx, by, bz, e;
     double pT;
     for (int i = 0; i < nx; i++) {
         rho = fanParameters.rho[i];

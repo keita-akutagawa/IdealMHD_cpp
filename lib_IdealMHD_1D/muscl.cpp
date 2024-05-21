@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <vector>
-#include "minmod.cpp"
+#include "minmod.hpp"
+#include "const.hpp"
 #include "muscl.hpp"
 
 
@@ -9,16 +10,16 @@ void MUSCL::getLeftComponent(
     std::vector<double>& qLeft
 )
 {
-    for (int i = 1; i < q.size() - 1; i++) {
+    for (int i = 1; i < nx; i++) {
         qLeft[i] = q[i] + 0.5 * minmod(q[i] - q[i-1], q[i+1] - q[i]);
     }
 
     //周期境界条件
     qLeft[0] = q[0] + 0.5 * minmod(
-        q[0] - q[q.size()-1], q[1] - q[0]
+        q[0] - q[nx-1], q[1] - q[0]
         );
-    qLeft[q.size()-1] = q[q.size()-1] + 0.5 * minmod(
-        q[q.size()-1] - q[q.size()-2], q[0] - q[q.size()-1]
+    qLeft[nx-1] = q[nx-1] + 0.5 * minmod(
+        q[nx-1] - q[nx-2], q[0] - q[nx-1]
         );
 }
 
@@ -28,7 +29,7 @@ void MUSCL::getRightComponent(
     std::vector<double>& qRight
 )
 {
-    for (int i = 1; i < q.size() - 1; i++) {
+    for (int i = 1; i < nx; i++) {
         qRight[i] = q[i] - 0.5 * minmod(q[i+1] - q[i], q[i+2] - q[i+1]);
     }
 
@@ -36,8 +37,8 @@ void MUSCL::getRightComponent(
     qRight[0] = q[0] + 0.5 * minmod(
         q[1] - q[0], q[2] - q[1]
         );
-    qRight[q.size()-1] = q[q.size()-1] + 0.5 * minmod(
-        q[0] - q[q.size()-1], q[1] - q[0]
+    qRight[nx-1] = q[nx-1] + 0.5 * minmod(
+        q[0] - q[nx-1], q[1] - q[0]
         );
 }
 

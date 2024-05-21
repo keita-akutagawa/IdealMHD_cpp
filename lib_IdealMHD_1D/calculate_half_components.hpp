@@ -3,7 +3,6 @@
 #include "muscl.hpp"
 
 
-class MUSCL;
 
 struct Components
 {
