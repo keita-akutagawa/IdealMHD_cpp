@@ -28,7 +28,6 @@ public:
 
     std::vector<std::vector<double>> getU();
 
-private:
     void calculateDt();
 };
 
