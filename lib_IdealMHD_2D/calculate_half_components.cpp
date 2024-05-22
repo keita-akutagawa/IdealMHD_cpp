@@ -4,16 +4,24 @@
 #include "calculate_half_components.hpp"
 
 
-Components::Components()
+Components::Components(int nDirection) : nSize(nDirection)
 {
-    rho = std::vector(std::vector<double>(nDirection, 0.0));
-    u = std::vector<double>(nDirection, 0.0);
-    v = std::vector<double>(nDirection, 0.0);
-    w = std::vector<double>(nDirection, 0.0);
-    bx = std::vector<double>(nDirection, 0.0);
-    by = std::vector<double>(nDirection, 0.0);
-    bz = std::vector<double>(nDirection, 0.0);
-    p = std::vector<double>(nDirection, 0.0);
+    rho = std::vector(std::vector<double>(nSize, 0.0));
+    u = std::vector<double>(nSize, 0.0);
+    v = std::vector<double>(nSize, 0.0);
+    w = std::vector<double>(nSize, 0.0);
+    bx = std::vector<double>(nSize, 0.0);
+    by = std::vector<double>(nSize, 0.0);
+    bz = std::vector<double>(nSize, 0.0);
+    p = std::vector<double>(nSize, 0.0);
+}
+
+
+CalculateHalfComponents::CalculateHalfComponents(int nDirection) : nSize(nDirection)
+{
+    Components componentsCenter(nSize);
+    Components componentsLeft(nSize);
+    Components componentsRight(nSize);
 }
 
 
@@ -23,7 +31,7 @@ void CalculateHalfComponents::setPhysicalParameters(
 {
     double rho, u, v, w, bx, by, bz, e, p;
 
-    for (int i = 0; i < nDirection; i++) {
+    for (int i = 0; i < nSize; i++) {
         rho = U[0][i];
 
         //U[1] = rho * u
@@ -70,7 +78,7 @@ void CalculateHalfComponents::calculateLeftComponents()
     muscl.getLeftComponent(componentsCenter.bz,  componentsLeft.bz);
     muscl.getLeftComponent(componentsCenter.p,   componentsLeft.p);
 
-    for (int i = 0; i < nDirection; i++) {
+    for (int i = 0; i < nSize; i++) {
         componentsLeft.bx[i] = componentsCenter.bx[i];
     }
 }
@@ -86,7 +94,7 @@ void CalculateHalfComponents::calculateRightComponents()
     muscl.getRightComponent(componentsCenter.bz,  componentsRight.bz);
     muscl.getRightComponent(componentsCenter.p,   componentsRight.p);
 
-    for (int i = 0; i < nDirection; i++) {
+    for (int i = 0; i < nSize; i++) {
         componentsRight.bx[i] = componentsCenter.bx[i];
     }
 }

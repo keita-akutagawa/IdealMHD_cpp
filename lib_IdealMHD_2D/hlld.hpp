@@ -8,6 +8,8 @@ class CalculateHalfComponents;
 
 struct FanParameters
 {
+    int nSize; 
+
     std::vector<double> rho;
     std::vector<double> u;
     std::vector<double> v;
@@ -18,11 +20,14 @@ struct FanParameters
     std::vector<double> e;
     std::vector<double> pT;
 
-    FanParameters();
+    FanParameters() : nSize(0) {}
+    FanParameters(int nDirection);
 };
 
 struct HLLDParameters
 {
+    int nSize; 
+
     std::vector<double> pT;
     std::vector<double> pT1;
     std::vector<double> pT2;
@@ -35,14 +40,17 @@ struct HLLDParameters
     std::vector<double> S1;
     std::vector<double> SM;
 
-    HLLDParameters();
+    HLLDParameters() : nSize(0) {}
+    HLLDParameters(int nDirection);
 };
 
 struct Flux1D
 {
+    int nSize; 
     std::vector<std::vector<double>> flux;
 
-    Flux1D();
+    Flux1D() : nSize(0) {}
+    Flux1D(int nDirection);
 };
 
 
@@ -51,6 +59,8 @@ struct Flux1D
 class HLLD
 {
 private:
+    int nSize; 
+
     CalculateHalfComponents calculateHalfComponents;
     Components componentsCenter;
     Components componentsLeft;
@@ -69,6 +79,8 @@ private:
     Flux1D fluxOuterRight, fluxMiddleRight, fluxInnerRight;
 
 public:
+    HLLD() : nSize(0) {}
+    HLLD(int nDirection);
 
     void calculateFlux(
         const std::vector<std::vector<double>> U
