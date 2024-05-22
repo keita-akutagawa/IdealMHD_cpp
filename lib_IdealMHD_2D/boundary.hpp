@@ -10,11 +10,15 @@ public:
     std::string boundaryType;
 
     void periodicBoundary(
-        std::vector<std::vector<double>>& U
+        std::vector<std::vector<std::vector<double>>>& U
     );
 
-    void symmetricBoundary2nd(
-        std::vector<std::vector<double>>& U
+    void symmetricBoundary2ndX(
+        std::vector<std::vector<std::vector<double>>>& U
+    );
+
+    void symmetricBoundary2ndY(
+        std::vector<std::vector<std::vector<double>>>& U
     );
 
 private:

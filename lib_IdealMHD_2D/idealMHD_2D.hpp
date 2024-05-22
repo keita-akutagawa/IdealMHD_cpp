@@ -8,7 +8,7 @@ class IdealMHD2D
 {
 private:
     FluxSolver fluxSolver;
-    Flux2D fluxF, fluxG;
+    Flux2D flux2D;
     std::vector<std::vector<std::vector<double>>> U;
     std::vector<std::vector<std::vector<double>>> UBar;
     Boundary boundary;

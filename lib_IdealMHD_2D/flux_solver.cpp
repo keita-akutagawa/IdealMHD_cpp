@@ -19,10 +19,11 @@ FluxSolver::FluxSolver()
     flux1DForG = Flux1D();
 
     //バグが起きたら壊れるように
-    nDirection = -1;
+    //nDirection = -1;
 
     tmpVectorForF = std::vector(8, std::vector<double>(nx, 0.0));
     tmpVectorForG = std::vector(8, std::vector<double>(ny, 0.0));
+    tmpFlux = std::vector(8, std::vector(nx, std::vector<double>(ny, 0.0)));
 }
 
 
@@ -72,5 +73,29 @@ Flux2D FluxSolver::getFluxG(
         }
     }
 
+    setFluxGToProperPosition();
+
     return flux2D;
+}
+
+
+void FluxSolver::setFluxGToProperPosition()
+{
+    for (int comp = 0; comp < 8; comp++) {
+        for (int i = 0; i < nx; i++) {
+            for (int j = 0; j < ny; j++) {
+                tmpFlux[comp][i][j] = flux2D.fluxG[comp][i][j];
+            }
+        }
+    }
+    for (int i = 0; i < nx; i++) {
+        for (int j = 0; j < ny; j++) {
+            flux2D.fluxG[1][i][j] = tmpFlux[3][i][j];
+            flux2D.fluxG[2][i][j] = tmpFlux[1][i][j];
+            flux2D.fluxG[3][i][j] = tmpFlux[2][i][j];
+            flux2D.fluxG[4][i][j] = tmpFlux[6][i][j];
+            flux2D.fluxG[5][i][j] = tmpFlux[4][i][j];
+            flux2D.fluxG[6][i][j] = tmpFlux[5][i][j];
+        }
+    }
 }

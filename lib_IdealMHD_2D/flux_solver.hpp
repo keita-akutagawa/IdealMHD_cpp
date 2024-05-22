@@ -21,6 +21,7 @@ private:
     Flux2D flux2D;
     std::vector<std::vector<double>> tmpVectorForF;
     std::vector<std::vector<double>> tmpVectorForG;
+    std::vector<std::vector<std::vector<double>>> tmpFlux;
 
 public:
     FluxSolver();
@@ -32,6 +33,8 @@ public:
     Flux2D getFluxG(
         const std::vector<std::vector<std::vector<double>>> U
     );
+
+    void setFluxGToProperPosition();
 };
 
 
