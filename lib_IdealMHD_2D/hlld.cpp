@@ -208,11 +208,10 @@ void HLLD::setFanParametersFromComponents(
         by = components.by[i];
         bz = components.bz[i];
         p = components.p[i];
-
-
         e = p / (gamma_mhd - 1.0)
           + 0.5 * rho * (u * u + v * v + w * w)
-          + 0.5 * (bx * bx + by * by + bz * bz); 
+          + 0.5 * (bx1 * bx1 + by * by + bz * bz); 
+
         pT = p + 0.5 * (bx * bx + by * by + bz * bz);
         
         fanParameters.rho[i] = rho;
@@ -237,11 +236,10 @@ void HLLD::setFanParametersFromComponents(
     by = components.by[nDirection-1];
     bz = components.bz[nDirection-1];
     p = components.p[nDirection-1];
-
-
     e = p / (gamma_mhd - 1.0)
         + 0.5 * rho * (u * u + v * v + w * w)
-        + 0.5 * (bx * bx + by * by + bz * bz); 
+        + 0.5 * (bx1 * bx1 + by * by + bz * bz); 
+        
     pT = p + 0.5 * (bx * bx + by * by + bz * bz);
     
     fanParameters.rho[nDirection-1] = rho;

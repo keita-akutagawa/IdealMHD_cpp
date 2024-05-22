@@ -66,10 +66,13 @@ void CalculateHalfComponents::calculateLeftComponents()
     muscl.getLeftComponent(componentsCenter.u,   componentsLeft.u);
     muscl.getLeftComponent(componentsCenter.v,   componentsLeft.v);
     muscl.getLeftComponent(componentsCenter.w,   componentsLeft.w);
-    muscl.getLeftComponent(componentsCenter.bx,  componentsLeft.bx);
     muscl.getLeftComponent(componentsCenter.by,  componentsLeft.by);
     muscl.getLeftComponent(componentsCenter.bz,  componentsLeft.bz);
     muscl.getLeftComponent(componentsCenter.p,   componentsLeft.p);
+
+    for (int i = 0; i < nDirection; i++) {
+        componentsLeft.bx[i] = componentsCenter.bx[i];
+    }
 }
 
 
@@ -79,10 +82,13 @@ void CalculateHalfComponents::calculateRightComponents()
     muscl.getRightComponent(componentsCenter.u,   componentsRight.u);
     muscl.getRightComponent(componentsCenter.v,   componentsRight.v);
     muscl.getRightComponent(componentsCenter.w,   componentsRight.w);
-    muscl.getRightComponent(componentsCenter.bx,  componentsRight.bx);
     muscl.getRightComponent(componentsCenter.by,  componentsRight.by);
     muscl.getRightComponent(componentsCenter.bz,  componentsRight.bz);
     muscl.getRightComponent(componentsCenter.p,   componentsRight.p);
+
+    for (int i = 0; i < nDirection; i++) {
+        componentsRight.bx[i] = componentsCenter.bx[i];
+    }
 }
 
 
