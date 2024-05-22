@@ -38,11 +38,11 @@ struct HLLDParameters
     HLLDParameters();
 };
 
-struct Flux
+struct Flux1D
 {
     std::vector<std::vector<double>> flux;
 
-    Flux();
+    Flux1D();
 };
 
 
@@ -64,9 +64,9 @@ private:
     HLLDParameters hLLDLeftParameters;
     HLLDParameters hLLDRightParameters;
 
-    Flux flux;
-    Flux fluxOuterLeft, fluxMiddleLeft, fluxInnerLeft;
-    Flux fluxOuterRight, fluxMiddleRight, fluxInnerRight;
+    Flux1D flux;
+    Flux1D fluxOuterLeft, fluxMiddleLeft, fluxInnerLeft;
+    Flux1D fluxOuterRight, fluxMiddleRight, fluxInnerRight;
 
 public:
 
@@ -87,7 +87,7 @@ public:
     HLLDParameters getHLLDLeftParameters();
     HLLDParameters getHLLDRightParameters();
 
-    Flux getFlux();
+    Flux1D getFlux();
 
 private:
     double sign(double x);
@@ -123,7 +123,7 @@ private:
 
     void setFlux(
         const FanParameters fanParameters, 
-        Flux& flux
+        Flux1D& flux
     );
 };
 

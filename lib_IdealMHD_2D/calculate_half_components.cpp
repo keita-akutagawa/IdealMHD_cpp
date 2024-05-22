@@ -6,14 +6,14 @@
 
 Components::Components()
 {
-    rho = std::vector<double>(nx, 0.0);
-    u = std::vector<double>(nx, 0.0);
-    v = std::vector<double>(nx, 0.0);
-    w = std::vector<double>(nx, 0.0);
-    bx = std::vector<double>(nx, 0.0);
-    by = std::vector<double>(nx, 0.0);
-    bz = std::vector<double>(nx, 0.0);
-    p = std::vector<double>(nx, 0.0);
+    rho = std::vector(std::vector<double>(nDirection, 0.0));
+    u = std::vector<double>(nDirection, 0.0);
+    v = std::vector<double>(nDirection, 0.0);
+    w = std::vector<double>(nDirection, 0.0);
+    bx = std::vector<double>(nDirection, 0.0);
+    by = std::vector<double>(nDirection, 0.0);
+    bz = std::vector<double>(nDirection, 0.0);
+    p = std::vector<double>(nDirection, 0.0);
 }
 
 
@@ -23,7 +23,7 @@ void CalculateHalfComponents::setPhysicalParameters(
 {
     double rho, u, v, w, bx, by, bz, e, p;
 
-    for (int i = 0; i < nx; i++) {
+    for (int i = 0; i < nDirection; i++) {
         rho = U[0][i];
 
         //U[1] = rho * u

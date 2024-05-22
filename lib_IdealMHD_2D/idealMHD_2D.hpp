@@ -4,20 +4,20 @@
 #include "boundary.hpp"
 
 
-class IdealMHD1D
+class IdealMHD2D
 {
 private:
     FluxSolver fluxSolver;
-    Flux fluxF;
-    std::vector<std::vector<double>> U;
-    std::vector<std::vector<double>> UBar;
+    Flux2D fluxF, fluxG;
+    std::vector<std::vector<std::vector<double>>> U;
+    std::vector<std::vector<std::vector<double>>> UBar;
     Boundary boundary;
 
 public:
-    IdealMHD1D();
+    IdealMHD2D();
 
     void initializeU(
-        const std::vector<std::vector<double>> UInit
+        const std::vector<std::vector<std::vector<double>>> UInit
     ); 
 
     void oneStepRK2();
@@ -28,7 +28,7 @@ public:
         int step
     );
 
-    std::vector<std::vector<double>> getU();
+    std::vector<std::vector<std::vector<double>>> getU();
 
     void calculateDt();
 };

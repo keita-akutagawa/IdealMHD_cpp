@@ -5,32 +5,38 @@
 #include <iomanip>
 #include <string>
 #include "const.hpp"
-#include "idealMHD_1D.hpp"
+#include "idealMHD_2D.hpp"
 
 
-IdealMHD1D::IdealMHD1D()
+IdealMHD2D::IdealMHD2D()
 {
-    U = std::vector(8, std::vector<double>(nx, 0.0));
-    UBar = std::vector(8, std::vector<double>(nx, 0.0));
+    U = std::vector(8, std::vector(nx, std::vector<double>(ny, 0.0)));
+    UBar = std::vector(8, std::vector(nx, std::vector<double>(ny, 0.0)));
 }
 
 
-void IdealMHD1D::initializeU(
-    const std::vector<std::vector<double>> UInit
+void IdealMHD2D::initializeU(
+    const std::vector<std::vector<std::vector<double>>> UInit
 )
 {
     for (int comp = 0; comp < 8; comp++) {
         for (int i = 0; i < nx; i++) {
-            U[comp][i] = UInit[comp][i];
+            for (int j = 0; j < ny; j++) {
+                U[comp][i][j] = UInit[comp][i][j];
+            }
         }
     }
 }
 
 
-void IdealMHD1D::oneStepRK2()
+void IdealMHD2D::oneStepRK2()
 {
     for (int comp = 0; comp < 8; comp++) {
-        std::copy(U[comp].begin(), U[comp].end(), UBar[comp].begin());
+        for (int i = 0; i < nx; i++) {
+            for (int j = 0; j < ny; j++) {
+                UBar[comp][i][j] = U[comp][i][j];
+            }
+        }
     }
 
     calculateDt();
@@ -67,7 +73,7 @@ void IdealMHD1D::oneStepRK2()
 }
 
 
-void IdealMHD1D::save(
+void IdealMHD2D::save(
     std::string directoryname, 
     std::string filenameWithoutStep, 
     int step
@@ -83,15 +89,20 @@ void IdealMHD1D::save(
 
     for (int comp = 0; comp < 8; comp++) {
         for (int i = 0; i < nx-1; i++) {
-            ofs << U[comp][i] << ",";
+            for (int j = 0; j < ny; j++) {
+                ofs << U[comp][i][j] << ",";
+            }
         }
-        ofs << U[comp][nx-1];
+        for (int j = 0; j < ny-1; j++) {
+            ofs << U[comp][nx-1][j] << ",";
+        }
+        ofs << U[comp][nx-1][ny-1];
         ofs << std::endl;
     }
 }
 
 
-void IdealMHD1D::calculateDt()
+void IdealMHD2D::calculateDt()
 {
     double rho, u, v, w, bx, by, bz, e, p, cs, ca;
     double maxSpeed;
@@ -123,7 +134,7 @@ void IdealMHD1D::calculateDt()
 
 
 // getter
-std::vector<std::vector<double>> IdealMHD1D::getU()
+std::vector<std::vector<std::vector<double>>> IdealMHD2D::getU()
 {
     return U;
 }
