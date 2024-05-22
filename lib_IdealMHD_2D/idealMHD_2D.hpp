@@ -31,6 +31,8 @@ public:
     std::vector<std::vector<std::vector<double>>> getU();
 
     void calculateDt();
+
+    bool checkCalculationIsCrashed();
 };
 
 

@@ -167,6 +167,22 @@ void IdealMHD2D::calculateDt()
 }
 
 
+bool IdealMHD2D::checkCalculationIsCrashed()
+{
+    for (int comp = 0; comp < 8; comp++) {
+        for (int i = 0; i < nx; i++) {
+            for (int j = 0; j < ny; j++) {
+                if (std::isnan(U[comp][i][j])) {
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+
 // getter
 std::vector<std::vector<std::vector<double>>> IdealMHD2D::getU()
 {

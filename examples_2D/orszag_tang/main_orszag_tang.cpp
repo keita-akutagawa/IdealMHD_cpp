@@ -34,7 +34,7 @@ int main()
     std::string directoryname = "results";
     std::string filenameWithoutStep = "orszag_tang";
     std::ofstream logfile("log.txt");
-    int recordStep = 100;
+    int recordStep = 10;
 
 
     double rho0, u0, v0, w0, bx0, by0, bz0, p0, e0;
@@ -83,11 +83,11 @@ int main()
         }
         idealMHD2D.oneStepRK2();
 
-        if (dt > dtError / 2) {
-            std::cout << "Calculation stopped!" << std::endl;
+        if (idealMHD2D.checkCalculationIsCrashed()) {
+            std::cout << "Calculation stopped! : " << step << " steps" << std::endl;
             return 0;
         }
-        
+
         totalTime += dt;
     }
     
