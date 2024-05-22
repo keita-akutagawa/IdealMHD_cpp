@@ -9,6 +9,8 @@
 
 const double EPS = 1e-20;
 const double PI = 3.141592653589793;
+const double dtError = 1e100;
+
 const int nx = 256;
 const double xmin = 0.0;
 const double xmax = 2.0 * PI;
@@ -80,6 +82,12 @@ int main()
                       << std::endl;
         }
         idealMHD2D.oneStepRK2();
+
+        if (dt > dtError / 2) {
+            std::cout << "Calculation stopped!" << std::endl;
+            return 0;
+        }
+        
         totalTime += dt;
     }
     

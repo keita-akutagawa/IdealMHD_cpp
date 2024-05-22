@@ -86,8 +86,8 @@ void IdealMHD2D::oneStepRK2()
         //周期境界条件
         for (int i = 1; i < nx; i++) {
             U[comp][i][0] = 0.5 * (U[comp][i][0] + UBar[comp][i][0]
-                            - dt / dx * (flux2D.fluxF[comp][i][0] - flux2D.fluxF[comp][i-1][0])
-                            - dt / dy * (flux2D.fluxG[comp][i][0] - flux2D.fluxG[comp][i][ny-1]));
+                          - dt / dx * (flux2D.fluxF[comp][i][0] - flux2D.fluxF[comp][i-1][0])
+                          - dt / dy * (flux2D.fluxG[comp][i][0] - flux2D.fluxG[comp][i][ny-1]));
         }
         for (int j = 1; j < ny; j++) {
             U[comp][0][j] = 0.5 * (U[comp][0][j] + UBar[comp][0][j]
@@ -138,7 +138,7 @@ void IdealMHD2D::calculateDt()
     double rho, u, v, w, bx, by, bz, e, p, cs, ca;
     double maxSpeedX, maxSpeedY;
     
-    dt = 1e100; //十分大きくしておく
+    dt = dtError; //十分大きくしておく
     for (int i = 0; i < nx; i++) {
         for (int j = 0; j < ny; j++) {
             rho = U[0][i][j];
