@@ -23,7 +23,7 @@ int nDirection = nx;
 const double CFL = 0.7;
 const double gamma_mhd = 5.0 / 3.0;
 double dt = 0.0;
-const int totalStep = 100;
+const int totalStep = 10000;
 double totalTime = 0.0;
 
 
@@ -32,7 +32,7 @@ int main()
     std::string directoryname = "results";
     std::string filenameWithoutStep = "orszag_tang";
     std::ofstream logfile("log.txt");
-    int recordStep = 10;
+    int recordStep = 100;
 
 
     double rho0, u0, v0, w0, bx0, by0, bz0, p0, e0;

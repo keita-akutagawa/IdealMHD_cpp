@@ -11,16 +11,14 @@ struct Flux2D
 };
 
 
-class HLLD;
-
 class FluxSolver
 {
 private:
     HLLD hLLDForF, hLLDForG;
     Flux1D flux1DForF, flux1DForG;
     Flux2D flux2D;
-    std::vector<std::vector<double>> tmpVectorForF;
-    std::vector<std::vector<double>> tmpVectorForG;
+    std::vector<std::vector<double>> tmpUForF;
+    std::vector<std::vector<double>> tmpUForG;
     std::vector<std::vector<std::vector<double>>> tmpFlux;
 
 public:

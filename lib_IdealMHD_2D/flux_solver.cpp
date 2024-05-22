@@ -15,14 +15,14 @@ FluxSolver::FluxSolver()
     flux1DForF = Flux1D();
 
     nDirection = ny;
-    hLLDForF = HLLD();
+    hLLDForG = HLLD();
     flux1DForG = Flux1D();
 
     //バグが起きたら壊れるように
     //nDirection = -1;
 
-    tmpVectorForF = std::vector(8, std::vector<double>(nx, 0.0));
-    tmpVectorForG = std::vector(8, std::vector<double>(ny, 0.0));
+    tmpUForF = std::vector(8, std::vector<double>(nx, 0.0));
+    tmpUForG = std::vector(8, std::vector<double>(ny, 0.0));
     tmpFlux = std::vector(8, std::vector(nx, std::vector<double>(ny, 0.0)));
 }
 
@@ -34,11 +34,11 @@ Flux2D FluxSolver::getFluxF(
     for (int j = 0; j < ny; j++) {
         for (int comp = 0; comp < 8; comp++) {
             for (int i = 0; i < nx; i++) {
-                tmpVectorForF[comp][i] = U[comp][i][j];
+                tmpUForF[comp][i] = U[comp][i][j];
             }
         }
 
-        hLLDForF.calculateFlux(tmpVectorForF);
+        hLLDForF.calculateFlux(tmpUForF);
         flux1DForF = hLLDForF.getFlux();
 
         for (int comp = 0; comp < 8; comp++) {
@@ -52,18 +52,24 @@ Flux2D FluxSolver::getFluxF(
 }
 
 
+//fluxGはfluxFの計算で使う変数を入れ替えることで計算する
 Flux2D FluxSolver::getFluxG(
     const std::vector<std::vector<std::vector<double>>> U
 )
 {
     for (int i = 0; i < nx; i++) {
-        for (int comp = 0; comp < 8; comp++) {
-            for (int j = 0; j < ny; j++) {
-                tmpVectorForG[comp][j] = U[comp][i][j];
-            }
+        for (int j = 0; j < ny; j++) {
+            tmpUForG[0][j] = U[0][i][j];
+            tmpUForG[1][j] = U[2][i][j];
+            tmpUForG[2][j] = U[3][i][j];
+            tmpUForG[3][j] = U[1][i][j];
+            tmpUForG[4][j] = U[5][i][j];
+            tmpUForG[5][j] = U[6][i][j];
+            tmpUForG[6][j] = U[4][i][j];
+            tmpUForG[7][j] = U[7][i][j];
         }
 
-        hLLDForG.calculateFlux(tmpVectorForG);
+        hLLDForG.calculateFlux(tmpUForG);
         flux1DForG = hLLDForG.getFlux();
 
         for (int comp = 0; comp < 8; comp++) {
@@ -88,6 +94,7 @@ void FluxSolver::setFluxGToProperPosition()
             }
         }
     }
+    
     for (int i = 0; i < nx; i++) {
         for (int j = 0; j < ny; j++) {
             flux2D.fluxG[1][i][j] = tmpFlux[3][i][j];
