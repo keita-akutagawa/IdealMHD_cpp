@@ -75,10 +75,10 @@ int main()
         if (step % recordStep == 0) {
             idealMHD2D.save(directoryname, filenameWithoutStep, step);
             logfile << std::to_string(step) << ","
-                    << std::setprecision(3) << totalTime
+                    << std::setprecision(4) << totalTime
                     << std::endl;
             std::cout << std::to_string(step) << " step done : total time is "
-                      << std::setprecision(3) << totalTime
+                      << std::setprecision(4) << totalTime
                       << std::endl;
         }
         idealMHD2D.oneStepRK2();
