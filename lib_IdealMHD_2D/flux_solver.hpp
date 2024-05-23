@@ -7,7 +7,10 @@ struct Flux2D
     std::vector<std::vector<std::vector<double>>> fluxF;
     std::vector<std::vector<std::vector<double>>> fluxG;
 
-    Flux2D();
+    Flux2D() : 
+        fluxF(8, std::vector<std::vector<double>>(nx, std::vector<double>(ny, 0.0))), 
+        fluxG(8, std::vector<std::vector<double>>(nx, std::vector<double>(ny, 0.0)))
+        {}
 };
 
 
@@ -22,7 +25,15 @@ private:
     std::vector<std::vector<std::vector<double>>> tmpFlux;
 
 public:
-    FluxSolver();
+    FluxSolver() : 
+        hLLDForF(nx), 
+        hLLDForG(ny), 
+        flux1DForF(nx), 
+        flux1DForG(ny), 
+        tmpUForF(8, std::vector<double>(nx, 0.0)), 
+        tmpUForG(8, std::vector<double>(ny, 0.0)), 
+        tmpFlux(8, std::vector<std::vector<double>>(nx, std::vector<double>(ny, 0.0)))
+        {};
 
     Flux2D getFluxF(
         const std::vector<std::vector<std::vector<double>>> U

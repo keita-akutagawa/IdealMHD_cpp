@@ -5,9 +5,7 @@
 
 
 struct Components
-{
-    int nSize; 
-
+{ 
     std::vector<double> rho;
     std::vector<double> u;
     std::vector<double> v;
@@ -17,15 +15,19 @@ struct Components
     std::vector<double> bz;
     std::vector<double> p;
 
-    Components() : nSize(0) {}
-    Components(int nDirection);
+    Components(int nSize) : 
+        rho(nSize, 0.0),   
+        u(nSize, 0.0), v(nSize, 0.0), w(nSize, 0.0), 
+        bx(nSize, 0.0), by(nSize, 0.0), bz(nSize, 0.0), 
+        p(nSize, 0.0)
+        {};
 };
 
 
 class CalculateHalfComponents
 {
 private:
-    int nSize; 
+    int nDirection; 
 
     MUSCL muscl;
 
@@ -34,8 +36,14 @@ private:
     Components componentsRight;
 
 public:
-    CalculateHalfComponents() : nSize(0) {}
-    CalculateHalfComponents(int nDirection);
+    CalculateHalfComponents(int nSize) : 
+        nDirection(nSize), 
+
+        componentsCenter(nSize), 
+        componentsLeft(nSize), 
+        componentsRight(nSize)
+        {}
+    
 
     void setPhysicalParameters(
         const std::vector<std::vector<double>> U

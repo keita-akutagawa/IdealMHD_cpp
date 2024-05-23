@@ -5,34 +5,13 @@
 #include "calculate_half_components.hpp"
 
 
-Components::Components(int nDirection) : nSize(nDirection)
-{
-    rho = std::vector<double>(nSize, 0.0);
-    u = std::vector<double>(nSize, 0.0);
-    v = std::vector<double>(nSize, 0.0);
-    w = std::vector<double>(nSize, 0.0);
-    bx = std::vector<double>(nSize, 0.0);
-    by = std::vector<double>(nSize, 0.0);
-    bz = std::vector<double>(nSize, 0.0);
-    p = std::vector<double>(nSize, 0.0);
-}
-
-
-CalculateHalfComponents::CalculateHalfComponents(int nDirection) : nSize(nDirection)
-{
-    Components componentsCenter(nSize);
-    Components componentsLeft(nSize);
-    Components componentsRight(nSize);
-}
-
-
 void CalculateHalfComponents::setPhysicalParameters(
     const std::vector<std::vector<double>> U
 )
 {
     double rho, u, v, w, bx, by, bz, e, p;
 
-    for (int i = 0; i < nSize; i++) {
+    for (int i = 0; i < nDirection; i++) {
         rho = U[0][i];
         u = U[1][i] / rho;
         v = U[2][i] / rho;
@@ -64,10 +43,6 @@ void CalculateHalfComponents::setPhysicalParameters(
 
 void CalculateHalfComponents::calculateLeftComponents()
 { 
-    std::cout << nSize << "RRR";
-    for (int i = 0; i < nSize; i++){
-        std::cout << componentsCenter.rho[i];
-    }
     muscl.getLeftComponent(componentsCenter.rho, componentsLeft.rho);
     muscl.getLeftComponent(componentsCenter.u,   componentsLeft.u);
     muscl.getLeftComponent(componentsCenter.v,   componentsLeft.v);
@@ -76,7 +51,7 @@ void CalculateHalfComponents::calculateLeftComponents()
     muscl.getLeftComponent(componentsCenter.bz,  componentsLeft.bz);
     muscl.getLeftComponent(componentsCenter.p,   componentsLeft.p); 
 
-    for (int i = 0; i < nSize; i++) {
+    for (int i = 0; i < nDirection; i++) {
         componentsLeft.bx[i] = componentsCenter.bx[i];
     }
 }
@@ -92,7 +67,7 @@ void CalculateHalfComponents::calculateRightComponents()
     muscl.getRightComponent(componentsCenter.bz,  componentsRight.bz);
     muscl.getRightComponent(componentsCenter.p,   componentsRight.p);
 
-    for (int i = 0; i < nSize; i++) {
+    for (int i = 0; i < nDirection; i++) {
         componentsRight.bx[i] = componentsCenter.bx[i];
     }
 }

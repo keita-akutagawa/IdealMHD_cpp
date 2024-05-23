@@ -1,27 +1,6 @@
 #include "flux_solver.hpp"
 
 
-Flux2D::Flux2D()
-{
-    fluxF = std::vector(8, std::vector(nx, std::vector<double>(ny, 0.0)));
-    fluxG = std::vector(8, std::vector(nx, std::vector<double>(ny, 0.0)));
-}
-
-
-FluxSolver::FluxSolver()
-{
-    HLLD hLLDForF(nx);
-    Flux1D flux1DForF(nx);
-
-    HLLD hLLDForG(ny);
-    Flux1D flux1DForG(ny);
-
-    tmpUForF = std::vector(8, std::vector<double>(nx, 0.0));
-    tmpUForG = std::vector(8, std::vector<double>(ny, 0.0));
-    tmpFlux = std::vector(8, std::vector(nx, std::vector<double>(ny, 0.0)));
-}
-
-
 Flux2D FluxSolver::getFluxF(
     const std::vector<std::vector<std::vector<double>>> U
 )
