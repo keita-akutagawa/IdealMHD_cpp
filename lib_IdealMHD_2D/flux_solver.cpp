@@ -2,7 +2,7 @@
 
 
 Flux2D FluxSolver::getFluxF(
-    const std::vector<std::vector<std::vector<double>>> U
+    const std::vector<std::vector<std::vector<double>>>& U
 )
 {
     for (int j = 0; j < ny; j++) {
@@ -28,7 +28,7 @@ Flux2D FluxSolver::getFluxF(
 
 //fluxGはfluxFの計算で使う変数を入れ替えることで計算する
 Flux2D FluxSolver::getFluxG(
-    const std::vector<std::vector<std::vector<double>>> U
+    const std::vector<std::vector<std::vector<double>>>& U
 )
 {
     for (int i = 0; i < nx; i++) {

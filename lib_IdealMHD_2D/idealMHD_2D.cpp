@@ -8,13 +8,6 @@
 #include "idealMHD_2D.hpp"
 
 
-IdealMHD2D::IdealMHD2D()
-{
-    U = std::vector(8, std::vector(nx, std::vector<double>(ny, 0.0)));
-    UBar = std::vector(8, std::vector(nx, std::vector<double>(ny, 0.0)));
-}
-
-
 void IdealMHD2D::initializeU(
     const std::vector<std::vector<std::vector<double>>> UInit
 )

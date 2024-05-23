@@ -5,8 +5,6 @@
 
 struct FanParameters
 {
-    int nSize; 
-
     std::vector<double> rho;
     std::vector<double> u;
     std::vector<double> v;
@@ -82,7 +80,6 @@ private:
 public:
     HLLD(int nSize) : 
         nDirection(nSize), 
-        
         calculateHalfComponents(nSize),
         componentsCenter(nSize),
         componentsLeft(nSize),

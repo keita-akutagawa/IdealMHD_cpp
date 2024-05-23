@@ -14,7 +14,10 @@ private:
     Boundary boundary;
 
 public:
-    IdealMHD2D();
+    IdealMHD2D() :
+        U(8, std::vector<std::vector<double>>(nx, std::vector<double>(ny, 0.0))), 
+        UBar(8, std::vector<std::vector<double>>(nx, std::vector<double>(ny, 0.0)))
+        {}
 
     void initializeU(
         const std::vector<std::vector<std::vector<double>>> UInit

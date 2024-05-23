@@ -36,11 +36,11 @@ public:
         {};
 
     Flux2D getFluxF(
-        const std::vector<std::vector<std::vector<double>>> U
+        const std::vector<std::vector<std::vector<double>>>& U
     );
 
     Flux2D getFluxG(
-        const std::vector<std::vector<std::vector<double>>> U
+        const std::vector<std::vector<std::vector<double>>>& U
     );
 
     void setFluxGToProperPosition();

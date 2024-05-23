@@ -38,13 +38,12 @@ private:
 public:
     CalculateHalfComponents(int nSize) : 
         nDirection(nSize), 
-
+        muscl(nSize), 
         componentsCenter(nSize), 
         componentsLeft(nSize), 
         componentsRight(nSize)
         {}
     
-
     void setPhysicalParameters(
         const std::vector<std::vector<double>> U
     );
