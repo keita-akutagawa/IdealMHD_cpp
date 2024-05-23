@@ -61,8 +61,8 @@ HLLD::HLLD(int nDirection) : nSize(nDirection)
     FanParameters middleRightFanParameters(nSize);
     FanParameters innerLeftFanParameters(nSize);
     FanParameters innerRightFanParameters(nSize);
-    HLLD hLLDLeftParameters(nSize);
-    HLLD hLLDRightParameters(nSize);
+    HLLDParameters hLLDLeftParameters(nSize);
+    HLLDParameters hLLDRightParameters(nSize);
 
     Flux1D flux(nSize);
     Flux1D fluxOuterLeft(nSize), fluxMiddleLeft(nSize), fluxInnerLeft(nSize);

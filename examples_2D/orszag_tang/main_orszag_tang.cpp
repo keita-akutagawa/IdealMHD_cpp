@@ -20,8 +20,6 @@ const double ymin = 0.0;
 const double ymax = 2.0 * PI;
 const double dy = (ymax - ymin) / ny;
 
-int nDirection = nx;
-
 const double CFL = 0.7;
 const double gamma_mhd = 5.0 / 3.0;
 double dt = 0.0;
@@ -39,7 +37,6 @@ int main()
 
     double rho0, u0, v0, w0, bx0, by0, bz0, p0, e0;
     
-
     std::vector<std::vector<std::vector<double>>> UInit(8, std::vector(nx, std::vector<double>(ny, 0.0)));
     for (int i = 0; i < nx; i++) {
         for (int j = 0; j < ny; j++) {
