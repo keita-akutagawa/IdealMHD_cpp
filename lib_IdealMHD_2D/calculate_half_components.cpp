@@ -34,21 +34,14 @@ void CalculateHalfComponents::setPhysicalParameters(
 
     for (int i = 0; i < nSize; i++) {
         rho = U[0][i];
-
-        //U[1] = rho * u
         u = U[1][i] / rho;
-
-        //U[2] = rho * v
         v = U[2][i] / rho;
-
-        //U[3] = rho * w
         w = U[3][i] / rho;
 
         bx = U[4][i];
         by = U[5][i];
         bz = U[6][i];
 
-        //U[7] = e
         e = U[7][i];
         p = (gamma_mhd - 1.0)
           * (e
@@ -71,6 +64,7 @@ void CalculateHalfComponents::setPhysicalParameters(
 
 void CalculateHalfComponents::calculateLeftComponents()
 { 
+    std::cout << nSize << "RRR";
     for (int i = 0; i < nSize; i++){
         std::cout << componentsCenter.rho[i];
     }

@@ -112,7 +112,7 @@ void HLLD::setComponents(
     calculateHalfComponents.setPhysicalParameters(U);
     componentsCenter = calculateHalfComponents.getCenterComponents();
     for (int i = 0; i < nSize; i++) {
-        std::cout << componentsCenter.rho[i];
+        std::cout << componentsCenter.rho[i] << "ZZZ";
     }
 
     calculateHalfComponents.calculateLeftComponents();
