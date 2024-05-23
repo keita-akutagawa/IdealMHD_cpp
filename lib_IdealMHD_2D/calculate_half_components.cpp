@@ -1,12 +1,13 @@
 #include <algorithm>
 #include <vector>
+#include <iostream>
 #include "const.hpp"
 #include "calculate_half_components.hpp"
 
 
 Components::Components(int nDirection) : nSize(nDirection)
 {
-    rho = std::vector(std::vector<double>(nSize, 0.0));
+    rho = std::vector<double>(nSize, 0.0);
     u = std::vector<double>(nSize, 0.0);
     v = std::vector<double>(nSize, 0.0);
     w = std::vector<double>(nSize, 0.0);
@@ -70,13 +71,16 @@ void CalculateHalfComponents::setPhysicalParameters(
 
 void CalculateHalfComponents::calculateLeftComponents()
 { 
+    for (int i = 0; i < nSize; i++){
+        std::cout << componentsCenter.rho[i];
+    }
     muscl.getLeftComponent(componentsCenter.rho, componentsLeft.rho);
     muscl.getLeftComponent(componentsCenter.u,   componentsLeft.u);
     muscl.getLeftComponent(componentsCenter.v,   componentsLeft.v);
     muscl.getLeftComponent(componentsCenter.w,   componentsLeft.w);
     muscl.getLeftComponent(componentsCenter.by,  componentsLeft.by);
     muscl.getLeftComponent(componentsCenter.bz,  componentsLeft.bz);
-    muscl.getLeftComponent(componentsCenter.p,   componentsLeft.p);
+    muscl.getLeftComponent(componentsCenter.p,   componentsLeft.p); 
 
     for (int i = 0; i < nSize; i++) {
         componentsLeft.bx[i] = componentsCenter.bx[i];

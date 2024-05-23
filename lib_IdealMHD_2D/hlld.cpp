@@ -14,7 +14,6 @@ inline double HLLD::sign(double x)
 
 FanParameters::FanParameters(int nDirection) : nSize(nDirection)
 {
-
     rho = std::vector<double>(nSize, 0.0);
     u = std::vector<double>(nSize, 0.0);
     v = std::vector<double>(nSize, 0.0);
@@ -111,6 +110,11 @@ void HLLD::setComponents(
 )
 {
     calculateHalfComponents.setPhysicalParameters(U);
+    componentsCenter = calculateHalfComponents.getCenterComponents();
+    for (int i = 0; i < nSize; i++) {
+        std::cout << componentsCenter.rho[i];
+    }
+
     calculateHalfComponents.calculateLeftComponents();
     calculateHalfComponents.calculateRightComponents();
 

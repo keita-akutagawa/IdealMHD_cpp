@@ -32,7 +32,7 @@ int main()
     std::string directoryname = "results";
     std::string filenameWithoutStep = "orszag_tang";
     std::ofstream logfile("log.txt");
-    int recordStep = 10;
+    int recordStep = 1;
 
 
     double rho0, u0, v0, w0, bx0, by0, bz0, p0, e0;

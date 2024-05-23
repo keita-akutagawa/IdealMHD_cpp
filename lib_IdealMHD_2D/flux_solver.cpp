@@ -11,10 +11,10 @@ Flux2D::Flux2D()
 FluxSolver::FluxSolver()
 {
     HLLD hLLDForF(nx);
-    flux1DForF = Flux1D(nx);
+    Flux1D flux1DForF(nx);
 
     HLLD hLLDForG(ny);
-    flux1DForG = Flux1D(ny);
+    Flux1D flux1DForG(ny);
 
     tmpUForF = std::vector(8, std::vector<double>(nx, 0.0));
     tmpUForG = std::vector(8, std::vector<double>(ny, 0.0));

@@ -3,9 +3,6 @@
 #include "calculate_half_components.hpp"
 
 
-class CalculateHalfComponents;
-
-
 struct FanParameters
 {
     int nSize; 
