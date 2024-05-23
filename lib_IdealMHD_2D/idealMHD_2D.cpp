@@ -9,7 +9,7 @@
 
 
 void IdealMHD2D::initializeU(
-    const std::vector<std::vector<std::vector<double>>> UInit
+    const std::vector<std::vector<std::vector<double>>>& UInit
 )
 {
     for (int comp = 0; comp < 8; comp++) {

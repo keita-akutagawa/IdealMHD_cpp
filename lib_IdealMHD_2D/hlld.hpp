@@ -98,7 +98,7 @@ public:
         {}
 
     void calculateFlux(
-        const std::vector<std::vector<double>> U
+        const std::vector<std::vector<double>>& U
     );
 
     Components getLeftComponents();
@@ -120,7 +120,7 @@ private:
     double sign(double x);
 
     void setComponents(
-        const std::vector<std::vector<double>> U
+        const std::vector<std::vector<double>>& U
     );
 
     void calculateHLLDParametersForOuterFan();
@@ -130,26 +130,26 @@ private:
     void calculateHLLDParametersForInnerFan();
 
     void setFanParametersFromComponents(
-        const Components components, 
+        const Components& components, 
         FanParameters& fanParameters
     );
 
     void calculateHLLDSubParametersForMiddleFan(
-        const Components components, 
-        const FanParameters outerFanParameters, 
+        const Components& components, 
+        const FanParameters& outerFanParameters, 
         HLLDParameters& hLLDParameters
     );
 
     void calculateHLLDParameters1(
-        const FanParameters outerFanParameters, 
-        const HLLDParameters hLLDParameters, 
+        const FanParameters& outerFanParameters, 
+        const HLLDParameters& hLLDParameters, 
         FanParameters& middleFanParameters
     );
 
     void calculateHLLDParameters2();
 
     void setFlux(
-        const FanParameters fanParameters, 
+        const FanParameters& fanParameters, 
         Flux1D& flux
     );
 };

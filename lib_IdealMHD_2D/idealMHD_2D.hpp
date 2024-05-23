@@ -20,7 +20,7 @@ public:
         {}
 
     void initializeU(
-        const std::vector<std::vector<std::vector<double>>> UInit
+        const std::vector<std::vector<std::vector<double>>>& UInit
     ); 
 
     void oneStepRK2();

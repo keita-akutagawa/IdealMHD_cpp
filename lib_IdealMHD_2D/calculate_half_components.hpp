@@ -45,7 +45,7 @@ public:
         {}
     
     void setPhysicalParameters(
-        const std::vector<std::vector<double>> U
+        const std::vector<std::vector<double>>& U
     );
 
     void calculateLeftComponents();

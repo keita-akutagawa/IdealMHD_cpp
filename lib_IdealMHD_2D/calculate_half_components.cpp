@@ -6,7 +6,7 @@
 
 
 void CalculateHalfComponents::setPhysicalParameters(
-    const std::vector<std::vector<double>> U
+    const std::vector<std::vector<double>>& U
 )
 {
     double rho, u, v, w, bx, by, bz, e, p;

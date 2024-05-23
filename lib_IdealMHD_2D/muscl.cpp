@@ -7,7 +7,7 @@
 
 
 void MUSCL::getLeftComponent(
-    const std::vector<double> q, 
+    const std::vector<double>& q, 
     std::vector<double>& qLeft
 )
 {
@@ -26,7 +26,7 @@ void MUSCL::getLeftComponent(
 
 
 void MUSCL::getRightComponent(
-    const std::vector<double> q, 
+    const std::vector<double>& q, 
     std::vector<double>& qRight
 )
 {

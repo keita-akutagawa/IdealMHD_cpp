@@ -13,7 +13,7 @@ inline double HLLD::sign(double x)
 
 
 void HLLD::calculateFlux(
-    const std::vector<std::vector<double>> U
+    const std::vector<std::vector<double>>& U
 )
 {
     setComponents(U);
@@ -49,7 +49,7 @@ void HLLD::calculateFlux(
 
 
 void HLLD::setComponents(
-    const std::vector<std::vector<double>> U
+    const std::vector<std::vector<double>>& U
 )
 {
     calculateHalfComponents.setPhysicalParameters(U);
@@ -155,7 +155,7 @@ void HLLD::calculateHLLDParametersForInnerFan()
 
 
 void HLLD::setFanParametersFromComponents(
-    const Components components, 
+    const Components& components, 
     FanParameters& fanParameters
 )
 {
@@ -219,8 +219,8 @@ void HLLD::setFanParametersFromComponents(
 
 
 void HLLD::calculateHLLDSubParametersForMiddleFan(
-    const Components components,
-    const FanParameters outerFanParameters, 
+    const Components& components,
+    const FanParameters& outerFanParameters, 
     HLLDParameters& hLLDParameters
 )
 {
@@ -254,8 +254,8 @@ void HLLD::calculateHLLDSubParametersForMiddleFan(
 
 
 void HLLD::calculateHLLDParameters1(
-    const FanParameters outerFanParameters, 
-    const HLLDParameters hlldParameters, 
+    const FanParameters& outerFanParameters, 
+    const HLLDParameters& hlldParameters, 
     FanParameters& middleFanParameters
 )
 {
@@ -385,7 +385,7 @@ void HLLD::calculateHLLDParameters2()
 
 
 void HLLD::setFlux(
-    const FanParameters fanParameters, 
+    const FanParameters& fanParameters, 
     Flux1D& flux
 )
 {
