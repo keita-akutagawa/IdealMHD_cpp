@@ -78,6 +78,7 @@ int main()
                       << std::setprecision(4) << totalTime
                       << std::endl;
         }
+        
         idealMHD2D.oneStepRK2();
 
         if (idealMHD2D.checkCalculationIsCrashed()) {
