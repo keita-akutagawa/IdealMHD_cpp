@@ -9,15 +9,17 @@ void CalculateHalfComponents::setPhysicalParameters(
     const std::vector<std::vector<double>>& U
 )
 {
-    double rho, u, v, w, bx, by, bz, e, p;
+    double rho, u, v, w, bx1, bx2, bx, by, bz, e, p;
 
-    for (int i = 0; i < nDirection; i++) {
+    for (int i = 0; i < nDirection-1; i++) {
         rho = U[0][i];
         u = U[1][i] / rho;
         v = U[2][i] / rho;
         w = U[3][i] / rho;
 
-        bx = U[4][i];
+        bx1 = U[4][i];
+        bx2 = U[4][i+1];
+        bx = 0.5 * (bx1 + bx2);
         by = U[5][i];
         bz = U[6][i];
 
@@ -25,7 +27,7 @@ void CalculateHalfComponents::setPhysicalParameters(
         p = (gamma_mhd - 1.0)
           * (e
           - 0.5 * rho * (u * u + v * v + w * w)
-          - 0.5 * (bx * bx + by * by + bz * bz)
+          - 0.5 * (bx1 * bx1 + by * by + bz * bz)
           );
         
 
@@ -38,6 +40,34 @@ void CalculateHalfComponents::setPhysicalParameters(
         componentsCenter.bz[i] = bz;
         componentsCenter.p[i] = p;
     }
+
+    rho = U[0][nDirection-1];
+    u = U[1][nDirection-1] / rho;
+    v = U[2][nDirection-1] / rho;
+    w = U[3][nDirection-1] / rho;
+
+    bx1 = U[4][nDirection-1];
+    bx2 = U[4][0];
+    bx = 0.5 * (bx1 + bx2);
+    by = U[5][nDirection-1];
+    bz = U[6][nDirection-1];
+
+    e = U[7][nDirection-1];
+    p = (gamma_mhd - 1.0)
+        * (e
+        - 0.5 * rho * (u * u + v * v + w * w)
+        - 0.5 * (bx * bx + by * by + bz * bz)
+        );
+    
+
+    componentsCenter.rho[nDirection-1] = rho;
+    componentsCenter.u[nDirection-1] = u;
+    componentsCenter.v[nDirection-1] = v;
+    componentsCenter.w[nDirection-1] = w;
+    componentsCenter.bx[nDirection-1] = bx;
+    componentsCenter.by[nDirection-1] = by;
+    componentsCenter.bz[nDirection-1] = bz;
+    componentsCenter.p[nDirection-1] = p;
 }
 
 

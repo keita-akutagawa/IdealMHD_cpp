@@ -159,22 +159,19 @@ void HLLD::setFanParametersFromComponents(
     FanParameters& fanParameters
 )
 {
-    double rho, u, v, w, bx, bx1, bx2, by, bz, p, e, pT;
-    for (int i = 0; i < nDirection-1; i++) {
+    double rho, u, v, w, bx, by, bz, p, e, pT;
+    for (int i = 0; i < nDirection; i++) {
         rho = components.rho[i];
         u = components.u[i];
         v = components.v[i];
         w = components.w[i];
-        //bxは半整数格子点上にある
-        bx1 = components.bx[i];
-        bx2 = components.bx[i+1];
-        bx = 0.5 * (bx1 + bx2);
+        bx = components.bx[i];
         by = components.by[i];
         bz = components.bz[i];
         p = components.p[i];
         e = p / (gamma_mhd - 1.0)
           + 0.5 * rho * (u * u + v * v + w * w)
-          + 0.5 * (bx1 * bx1 + by * by + bz * bz); 
+          + 0.5 * (bx * bx + by * by + bz * bz); 
 
         pT = p + 0.5 * (bx * bx + by * by + bz * bz);
         
@@ -188,33 +185,6 @@ void HLLD::setFanParametersFromComponents(
         fanParameters.e[i] = e;
         fanParameters.pT[i] = pT;
     }
-
-    rho = components.rho[nDirection-1];
-    u = components.u[nDirection-1];
-    v = components.v[nDirection-1];
-    w = components.w[nDirection-1];
-    //bxは半整数格子点上にある
-    bx1 = components.bx[nDirection-1];
-    bx2 = components.bx[0];
-    bx = 0.5 * (bx1 + bx2);
-    by = components.by[nDirection-1];
-    bz = components.bz[nDirection-1];
-    p = components.p[nDirection-1];
-    e = p / (gamma_mhd - 1.0)
-        + 0.5 * rho * (u * u + v * v + w * w)
-        + 0.5 * (bx1 * bx1 + by * by + bz * bz); 
-        
-    pT = p + 0.5 * (bx * bx + by * by + bz * bz);
-    
-    fanParameters.rho[nDirection-1] = rho;
-    fanParameters.u[nDirection-1] = u;
-    fanParameters.v[nDirection-1] = v;
-    fanParameters.w[nDirection-1] = w;
-    fanParameters.bx[nDirection-1] = bx;
-    fanParameters.by[nDirection-1] = by;
-    fanParameters.bz[nDirection-1] = bz;
-    fanParameters.e[nDirection-1] = e;
-    fanParameters.pT[nDirection-1] = pT;
 }
 
 
