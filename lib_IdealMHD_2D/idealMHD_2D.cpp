@@ -66,7 +66,8 @@ void IdealMHD2D::oneStepRK2()
                          - dt / dy * (flux2D.fluxG[comp][0][0] - flux2D.fluxG[comp][0][ny-1]);
     }
 
-    divBCleaner.divBClean(flux2D, bxOld, byOld, UBar);
+    ct.setOldFlux2D(flux2D);
+    ct.divBClean(bxOld, byOld, UBar);
 
     //これはどうにかすること。保守性が低い
     boundary.periodicBoundary(UBar);
@@ -99,7 +100,7 @@ void IdealMHD2D::oneStepRK2()
                             - dt / dy * (flux2D.fluxG[comp][0][0] - flux2D.fluxG[comp][0][ny-1]));
     }
 
-    divBCleaner.divBClean(flux2D, bxOld, byOld, U);
+    ct.divBClean(bxOld, byOld, U);
 
     //これはどうにかすること。保守性が低い
     boundary.periodicBoundary(U);

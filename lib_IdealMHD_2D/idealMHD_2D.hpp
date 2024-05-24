@@ -1,9 +1,9 @@
 #include <vector>
 #include <string>
 #include "const.hpp"
-#include "flux_solver.hpp"
+//#include "flux_solver.hpp" // divB_cleanerのCT法でFlux2Dを使うときにincludeした
 #include "boundary.hpp"
-#include "divB_cleaner.hpp"
+#include "ct.hpp"
 
 
 class IdealMHD2D
@@ -16,12 +16,14 @@ private:
     Boundary boundary;
     std::vector<std::vector<double>> bxOld;
     std::vector<std::vector<double>> byOld;
-    DivBCleaner divBCleaner;
+    CT ct;
 
 public:
     IdealMHD2D() :
         U(8, std::vector<std::vector<double>>(nx, std::vector<double>(ny, 0.0))), 
-        UBar(8, std::vector<std::vector<double>>(nx, std::vector<double>(ny, 0.0)))
+        UBar(8, std::vector<std::vector<double>>(nx, std::vector<double>(ny, 0.0))), 
+        bxOld(nx, std::vector<double>(ny, 0.0)), 
+        byOld(nx, std::vector<double>(ny, 0.0))
         {}
 
     void initializeU(

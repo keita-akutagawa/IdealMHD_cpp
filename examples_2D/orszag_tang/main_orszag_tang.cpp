@@ -29,7 +29,7 @@ double totalTime = 0.0;
 
 int main()
 {
-    std::string directoryname = "results";
+    std::string directoryname = "results_CT";
     std::string filenameWithoutStep = "orszag_tang";
     std::ofstream logfile("log.txt");
     int recordStep = 10;
