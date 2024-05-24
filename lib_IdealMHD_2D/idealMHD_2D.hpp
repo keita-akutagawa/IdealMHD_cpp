@@ -16,6 +16,7 @@ private:
     Boundary boundary;
     std::vector<std::vector<double>> bxOld;
     std::vector<std::vector<double>> byOld;
+    std::vector<std::vector<double>> tmpVector;
     CT ct;
 
 public:
@@ -23,7 +24,8 @@ public:
         U(8, std::vector<std::vector<double>>(nx, std::vector<double>(ny, 0.0))), 
         UBar(8, std::vector<std::vector<double>>(nx, std::vector<double>(ny, 0.0))), 
         bxOld(nx, std::vector<double>(ny, 0.0)), 
-        byOld(nx, std::vector<double>(ny, 0.0))
+        byOld(nx, std::vector<double>(ny, 0.0)), 
+        tmpVector(nx, std::vector<double>(ny, 0.0))
         {}
 
     void initializeU(
@@ -43,6 +45,14 @@ public:
     void calculateDt();
 
     bool checkCalculationIsCrashed();
+
+private:
+    void shiftUToCenterForCT(
+        std::vector<std::vector<std::vector<double>>>& U
+    );
+    void backUToCenterHalfForCT(
+        std::vector<std::vector<std::vector<double>>>& U
+    );
 };
 
 

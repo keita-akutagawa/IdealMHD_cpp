@@ -23,13 +23,6 @@ void IdealMHD2D::initializeU(
 
 void IdealMHD2D::oneStepRK2()
 {
-    for (int comp = 0; comp < 8; comp++) {
-        for (int i = 0; i < nx; i++) {
-            for (int j = 0; j < ny; j++) {
-                UBar[comp][i][j] = U[comp][i][j];
-            }
-        }
-    }
     for (int i = 0; i < nx; i++) {
         for (int j = 0; j < ny; j++) {
             bxOld[i][j] = U[4][i][j];
@@ -37,10 +30,20 @@ void IdealMHD2D::oneStepRK2()
         }
     }
 
+    for (int comp = 0; comp < 8; comp++) {
+        for (int i = 0; i < nx; i++) {
+            for (int j = 0; j < ny; j++) {
+                UBar[comp][i][j] = U[comp][i][j];
+            }
+        }
+    }
+
     calculateDt();
 
+    shiftUToCenterForCT(U);
     flux2D = fluxSolver.getFluxF(U);
     flux2D = fluxSolver.getFluxG(U);
+    backUToCenterHalfForCT(U);
 
     for (int comp = 0; comp < 8; comp++) {
         for (int i = 1; i < nx; i++) {
@@ -72,8 +75,10 @@ void IdealMHD2D::oneStepRK2()
     //これはどうにかすること。保守性が低い
     boundary.periodicBoundary(UBar);
 
+    shiftUToCenterForCT(UBar);
     flux2D = fluxSolver.getFluxF(UBar);
     flux2D = fluxSolver.getFluxG(UBar);
+    backUToCenterHalfForCT(UBar);
 
     for (int comp = 0; comp < 8; comp++) {
         for (int i = 1; i < nx; i++) {
@@ -183,6 +188,81 @@ bool IdealMHD2D::checkCalculationIsCrashed()
     }
 
     return false;
+}
+
+
+void IdealMHD2D::shiftUToCenterForCT(
+    std::vector<std::vector<std::vector<double>>>& U
+)
+{
+    for (int i = 0; i < nx; i++) {
+        for (int j = 0; j < ny; j++) {
+            tmpVector[i][j] = U[4][i][j];
+        }
+    }
+
+    for (int i = 1; i < nx; i++) {
+        for (int j = 0; j < ny; j++) {
+            U[4][i][j] = 0.5 * (tmpVector[i][j] + tmpVector[i-1][j]);
+        }
+    }
+    for (int j = 0; j < ny; j++) {
+        U[4][0][j] = 0.5 * (tmpVector[0][j] + tmpVector[nx-1][j]);
+    }
+
+
+    for (int i = 0; i < nx; i++) {
+        for (int j = 0; j < ny; j++) {
+            tmpVector[i][j] = U[5][i][j];
+        }
+    }
+
+    for (int i = 0; i < nx; i++) {
+        for (int j = 1; j < ny; j++) {
+            U[5][i][j] = 0.5 * (tmpVector[i][j] + tmpVector[i][j-1]);
+        }
+    }
+    for (int i = 0; i < nx; i++) {
+        U[5][i][0] = 0.5 * (tmpVector[i][0] + tmpVector[i][ny-1]);
+    }
+
+}
+
+void IdealMHD2D::backUToCenterHalfForCT(
+    std::vector<std::vector<std::vector<double>>>& U
+)
+{
+    for (int i = 0; i < nx; i++) {
+        for (int j = 0; j < ny; j++) {
+            tmpVector[i][j] = U[4][i][j];
+        }
+    }
+
+    for (int i = 0; i < nx-1; i++) {
+        for (int j = 0; j < ny; j++) {
+            U[4][i][j] = 0.5 * (tmpVector[i][j] + tmpVector[i+1][j]);
+        }
+    }
+    for (int j = 0; j < ny; j++) {
+        U[4][nx-1][j] = 0.5 * (tmpVector[nx-1][j] + tmpVector[0][j]);
+    }
+
+
+    for (int i = 0; i < nx; i++) {
+        for (int j = 0; j < ny; j++) {
+            tmpVector[i][j] = U[5][i][j];
+        }
+    }
+
+    for (int i = 0; i < nx; i++) {
+        for (int j = 0; j < ny-1; j++) {
+            U[5][i][j] = 0.5 * (tmpVector[i][j] + tmpVector[i][j+1]);
+        }
+    }
+    for (int i = 0; i < nx; i++) {
+        U[5][i][ny-1] = 0.5 * (tmpVector[i][ny-1] + tmpVector[i][0]);
+    }
+
 }
 
 
