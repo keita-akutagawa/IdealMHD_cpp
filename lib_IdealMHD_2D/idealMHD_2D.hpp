@@ -1,7 +1,9 @@
 #include <vector>
 #include <string>
+#include "const.hpp"
 #include "flux_solver.hpp"
 #include "boundary.hpp"
+#include "divB_cleaner.hpp"
 
 
 class IdealMHD2D
@@ -12,6 +14,9 @@ private:
     std::vector<std::vector<std::vector<double>>> U;
     std::vector<std::vector<std::vector<double>>> UBar;
     Boundary boundary;
+    std::vector<std::vector<double>> bxOld;
+    std::vector<std::vector<double>> byOld;
+    DivBCleaner divBCleaner;
 
 public:
     IdealMHD2D() :

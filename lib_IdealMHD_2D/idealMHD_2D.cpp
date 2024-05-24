@@ -4,7 +4,6 @@
 #include <fstream>
 #include <iomanip>
 #include <string>
-#include "const.hpp"
 #include "idealMHD_2D.hpp"
 
 
@@ -29,6 +28,12 @@ void IdealMHD2D::oneStepRK2()
             for (int j = 0; j < ny; j++) {
                 UBar[comp][i][j] = U[comp][i][j];
             }
+        }
+    }
+    for (int i = 0; i < nx; i++) {
+        for (int j = 0; j < ny; j++) {
+            bxOld[i][j] = U[4][i][j];
+            byOld[i][j] = U[5][i][j];
         }
     }
 
@@ -61,6 +66,8 @@ void IdealMHD2D::oneStepRK2()
                          - dt / dy * (flux2D.fluxG[comp][0][0] - flux2D.fluxG[comp][0][ny-1]);
     }
 
+    divBCleaner.divBClean(flux2D, bxOld, byOld, UBar);
+
     //これはどうにかすること。保守性が低い
     boundary.periodicBoundary(UBar);
 
@@ -91,6 +98,8 @@ void IdealMHD2D::oneStepRK2()
                             - dt / dx * (flux2D.fluxF[comp][0][0] - flux2D.fluxF[comp][nx-1][0])
                             - dt / dy * (flux2D.fluxG[comp][0][0] - flux2D.fluxG[comp][0][ny-1]));
     }
+
+    divBCleaner.divBClean(flux2D, bxOld, byOld, U);
 
     //これはどうにかすること。保守性が低い
     boundary.periodicBoundary(U);
