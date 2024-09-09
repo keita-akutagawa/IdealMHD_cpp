@@ -25,12 +25,12 @@ const double v0 = sqrt(b0 * b0 / rho0 + gamma_mhd * p0 / rho0);
 const double xmin = 0.0;
 const double xmax = 2.0 * PI * shear_thickness / 0.4;
 const double xCenter = (xmax - xmin) / 2.0;
-const double dx = shear_thickness / 8.0;
+const double dx = shear_thickness / 32.0;
 const int nx = int((xmax - xmin) / dx);
 const double ymin = 0.0;
 const double ymax = 2.0 * 10.0 * shear_thickness;
 const double yCenter = (ymax - ymin) / 2.0;
-const double dy = shear_thickness / 8.0;
+const double dy = shear_thickness / 32.0;
 const int ny = int((ymax - ymin) / dy);
 
 const double CFL = 0.7;
@@ -58,7 +58,7 @@ int main()
 
             rho = rho0 / 2.0 * ((1.0 - rr) * tanh(yPosition / shear_thickness) + 1.0 + rr);
             u = -v0 / 2.0 * tanh(yPosition / shear_thickness);
-            v = 0.02 * v0 * cos(2.0 * PI * xPosition / xmax) / pow(cosh(yPosition / shear_thickness), 2);
+            v = 0.02 * v0 * sin(2.0 * PI * xPosition / xmax) / pow(cosh(yPosition / shear_thickness), 2);
             w = 0.0;
             bx = b0 / 2.0 * ((1.0 - br) * tanh(yPosition / shear_thickness) + 1.0 + br) * cos(theta);
             by = 0.0;
